@@ -1,0 +1,484 @@
+/* LV Kommunal – Geteilter Einstieg (index.html)
+   Erzeugt aus style.css von werkzeuge/css-aufteilen.py.
+   Nicht von Hand bearbeiten: Änderungen gehören in style.css,
+   danach das Skript erneut ausführen. */
+
+/* ==========================================================================
+   LV Kommunal Winterdienst – Design-Tokens
+   Cyan #009EE0 und Grau #58585A stammen aus Logo und CSS der Bestandsseite.
+   Nachtblau, Raumweiss und Bernstein sind daraus abgeleitet:
+   Bernstein = Farbe der Rundumleuchte, ausschliesslich fuer Warnzustaende.
+   ========================================================================== */
+
+:root {
+  --eis:        #009EE0;
+  /* Für Flächen mit weißer Schrift: #009EE0 erreicht nur 3,0:1.
+     Dieser Ton kommt auf 5,0:1 und erfüllt damit WCAG AA. */
+  --eis-knopf:  #0077A8;
+  /* Abgeleitete Töne. Bewusst als feste Werte und nicht über color-mix():
+     die Mischung träfe die abgestimmten Töne nicht exakt (--eis-hell käme auf
+     etwa #5CC1EB statt #5CC8F2). Wer die Marke ändert, rechnet hier neu:
+       --eis-hell   = --eis um 36 % Richtung Weiss, danach von Hand geklärt
+       --eis-tief   = --eis um 24 % Richtung Schwarz  (identisch mit --eis-knopf)
+       --nacht-2/-3 = --nacht um 8 % bzw. 20 % Richtung --eis
+       --stahl-hell = --stahl um 8 % Richtung Weiss                          */
+  --eis-hell:   #5CC8F2;
+  --eis-tief:   #0077A8;
+  --nacht:      #0A1822;
+  --nacht-2:    #102637;
+  --nacht-3:    #1B3B52;
+  --stahl:      #58585A;
+  /* Erreichte auf Weiss nur 3,4:1 und wird für Kleinschrift benutzt.
+     Dieser Ton kommt auf 5,3:1 und auf --raum immer noch auf 4,9:1. */
+  --stahl-hell: #6B6B6E;
+  --raum:       #F1F5F8;
+  --raum-2:     #E1EAF0;
+  --weiss:      #FFFFFF;
+  --salz:       #FFB01F;
+  --salz-tief:  #C97F00;
+  --alarm:      #E5484D;
+  --gruen:      #4C8C3F;
+  --gruen-tief: #2F5A27;
+
+  --display: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --body:    "Instrument Sans", "Segoe UI", Helvetica, Arial, sans-serif;
+  --mono:    "Chivo Mono", "SFMono-Regular", Consolas, monospace;
+
+  --wrap: 1180px;
+  --gap: clamp(1rem, 2.5vw, 2rem);
+  --sec-y: clamp(4.5rem, 9vw, 8rem);
+  --r: 8px;
+  --r-l: 16px;
+
+  --schatten: 0 1px 2px rgba(10, 24, 34, .06), 0 8px 28px rgba(10, 24, 34, .08);
+  --schatten-tief: 0 24px 70px rgba(10, 24, 34, .35);
+}
+
+/* ------------------------------------------------------------------ Reset */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--body);
+  font-size: clamp(1rem, .96rem + .18vw, 1.0625rem);
+  line-height: 1.65;
+  color: var(--nacht);
+  background: var(--weiss);
+  -webkit-font-smoothing: antialiased;
+}
+img, svg, canvas { display: block; max-width: 100%; }
+img { height: auto; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+h1, h2, h3, h4 {
+  margin: 0; font-family: var(--display); font-weight: 700;
+  line-height: 1.05; letter-spacing: -.025em; text-wrap: balance;
+}
+p { margin: 0 0 1em; text-wrap: pretty; }
+p:last-child { margin-bottom: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+
+:focus-visible {
+  outline: 3px solid var(--eis);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.nacht :focus-visible, .sek-nacht :focus-visible, .hero :focus-visible, .tor :focus-visible { outline-color: var(--eis-hell); }
+
+.skip {
+  position: absolute; left: 1rem; top: -100px; z-index: 999;
+  background: var(--weiss); color: var(--nacht);
+  padding: .8rem 1.2rem; border-radius: var(--r); font-weight: 600;
+  transition: top .15s;
+}
+.skip:focus { top: 1rem; }
+
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.d-s  { font-size: clamp(1.1rem, 1.5vw, 1.32rem); font-weight: 700; }
+.btn-hell { background: var(--weiss); color: var(--nacht); border-color: var(--weiss); }
+.btn-hell:hover { background: var(--raum-2); border-color: var(--raum-2); }
+.nacht .btn-linie, .sek-nacht .btn-linie, .hero .btn-linie, .tor .btn-linie {
+  color: var(--weiss); border-color: rgba(255,255,255,.32);
+}
+.nacht .btn-linie:hover, .sek-nacht .btn-linie:hover, .hero .btn-linie:hover, .tor .btn-linie:hover {
+  border-color: var(--weiss); background: rgba(255,255,255,.08);
+}
+
+/* ==========================================================================
+   Startseite – geteilter Einstieg
+   Zwei gleich grosse Haelften, gerade Kante, volle Bildschirmhoehe.
+   Kein Kopfbereich: das Logo gehoert auf die Winterdienst-Seite.
+   ========================================================================== */
+.tor {
+  height: 100svh; position: relative; overflow: hidden;
+  background: var(--nacht); color: var(--weiss);
+}
+.tor-felder { position: absolute; inset: 0; display: flex; }
+
+/* Koernung gegen Streifen in den grossen dunklen Verlaeufen */
+.tor-felder::before {
+  content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  opacity: .3; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+}
+
+.feld {
+  position: relative; flex: 1 1 50%; min-width: 0;
+  display: flex; align-items: center; justify-content: center;
+  padding: clamp(4rem, 9vh, 7rem) clamp(1.5rem, 3.5vw, 3.5rem) clamp(8rem, 17vh, 11rem);
+  text-decoration: none; color: var(--weiss); overflow: hidden;
+  text-align: center; isolation: isolate;
+  transition: flex-grow .6s cubic-bezier(.22,.8,.28,1);
+}
+.feld-bild {
+  position: absolute; inset: -5%; z-index: -2;
+  background-size: cover; background-position: center;
+  will-change: transform;
+  --s: 1.05;
+  transform: scale(var(--s)) translate3d(var(--px, 0px), var(--py, 0px), 0);
+  transition: transform .5s cubic-bezier(.22,.8,.28,1), filter .7s ease;
+}
+/* Auftritt: das Bild kommt einmal ruhig heran, danach ist Ruhe */
+.tor:not(.tor--sparsam) .feld-bild {
+  animation: bild-heran 1.9s cubic-bezier(.16,.84,.28,1) both;
+}
+@keyframes bild-heran {
+  from { transform: scale(1.16); opacity: .25; }
+  to   { transform: scale(1.05); opacity: 1; }
+}
+.feld-schleier { position: absolute; inset: 0; z-index: -1; transition: opacity .5s; }
+
+/* Eigenes Motiv statt eines Ausschnitts aus dem Hero-Panorama: In der halben
+   Bildschirmbreite bliebe von einem 2,4:1-Bild fast nichts übrig. Der Zuschnitt
+   ist bereits im Zielverhältnis, deshalb wird hier nichts mehr beschnitten. */
+.feld--winter .feld-bild {
+  background-image: url("../img/winterstrasse-hoch.jpg");
+  background-image: image-set(url("../img/winterstrasse-hoch.webp") type("image/webp"),
+                              url("../img/winterstrasse-hoch.jpg") type("image/jpeg"));
+}
+.feld--winter .feld-schleier {
+  background:
+    radial-gradient(112% 78% at 50% 50%, rgba(4,12,18,.68) 0%, rgba(4,12,18,.12) 76%),
+    linear-gradient(to bottom,
+      rgba(6,16,23,.44) 0%, rgba(6,16,23,.34) 36%,
+      rgba(6,16,23,.50) 76%, rgba(6,16,23,.84) 100%),
+    linear-gradient(168deg, rgba(0,110,160,.18) 0%, rgba(6,16,23,0) 62%);
+}
+.feld--maeh .feld-bild {
+  background-image: url("../img/maeharbeiten.jpg");
+  background-image: image-set(url("../img/maeharbeiten.webp") type("image/webp"),
+                              url("../img/maeharbeiten.jpg") type("image/jpeg"));
+  background-position: 34% 58%;
+}
+.feld--maeh .feld-schleier {
+  background:
+    radial-gradient(112% 78% at 50% 50%, rgba(6,18,9,.68) 0%, rgba(6,18,9,.12) 76%),
+    linear-gradient(to bottom,
+      rgba(9,24,12,.46) 0%, rgba(9,24,12,.38) 36%,
+      rgba(9,24,12,.54) 76%, rgba(9,24,12,.86) 100%),
+    linear-gradient(168deg, rgba(46,104,32,.22) 0%, rgba(9,24,12,0) 62%);
+}
+.feld--maeh .feld-bild { filter: saturate(.9) brightness(.9); }
+
+/* Trennkante */
+.tor-felder::after {
+  content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px;
+  background: linear-gradient(to bottom,
+    transparent 0%, rgba(255,255,255,.3) 18%,
+    rgba(92,200,242,.85) 48%, rgba(169,207,151,.85) 52%,
+    rgba(255,255,255,.3) 82%, transparent 100%);
+  z-index: 4; pointer-events: none; transform: translateX(-.5px);
+}
+
+@media (min-width: 860px) {
+  .tor-felder:hover .feld { flex-grow: .92; }
+  .tor-felder:hover .feld:hover { flex-grow: 1.16; }
+  .feld:focus-visible { flex-grow: 1.16; }
+  .tor-felder:hover .feld:not(:hover) .feld-bild { filter: saturate(.5) brightness(.72); }}
+
+.feld:hover .feld-bild, .feld:focus-visible .feld-bild { --s: 1.1; }
+
+.feld:focus-visible {
+  outline: 4px solid var(--eis-hell);
+  outline-offset: -10px;
+  border-radius: 2px;
+}
+.feld--maeh:focus-visible { outline-color: #C4E0B8; }
+.feld:focus-visible .feld-cta { background: var(--eis-tief); }
+
+.feld-innen {
+  width: min(100%, 30rem); position: relative;
+  display: flex; flex-direction: column; align-items: center;
+}
+
+/* Logo bzw. Wortmarke */
+.feld-logo { height: clamp(38px, 4.6vh, 54px); width: auto; margin-bottom: clamp(1.4rem, 3.5vh, 2.4rem); }
+.feld-wortmarke {
+  display: block; margin-bottom: clamp(1.4rem, 3.5vh, 2.4rem);
+  font-family: var(--display); font-weight: 800;
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem); letter-spacing: .01em; line-height: 1;
+  color: var(--weiss);
+}
+.feld-wortmarke em {
+  display: block; margin-top: .45rem; font-style: normal;
+  font-family: var(--mono); font-weight: 400; font-size: .62rem;
+  letter-spacing: .28em; text-transform: uppercase; color: #A9CF97;
+}
+
+.feld-saison {
+  display: inline-flex; align-items: center; gap: .55rem;
+  font-family: var(--mono); font-size: .68rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--eis-hell); margin: 0 0 1rem;
+  padding: .3rem .85rem; border-radius: 100px;
+  /* Der Chip bringt seinen eigenen dunklen Grund mit. Läge er nur getönt über
+     dem Foto, hinge sein Kontrast davon ab, was im Bild gerade dahinter liegt –
+     an einer Straßenlaterne fiel er auf 3,2:1. */
+  border: 1px solid rgba(92,200,242,.45); background: rgba(4,12,18,.7);
+}
+.feld-saison::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.feld--maeh .feld-saison { color: #A9CF97; border-color: rgba(169,207,151,.45); background: rgba(6,18,9,.7); }
+.feld-saison[data-ruhe="true"] { color: #C6D8E3; border-color: rgba(255,255,255,.3); background: rgba(4,12,18,.72); }
+.feld--maeh .feld-saison[data-ruhe="true"] { background: rgba(6,18,9,.72); }
+
+.feld-titel {
+  display: block; white-space: nowrap; text-wrap: nowrap;
+  font-family: var(--display); color: inherit;
+  font-size: clamp(2.3rem, 6.2vw, 5.4rem); font-weight: 800; line-height: 1;
+  letter-spacing: -.025em; margin: 0 0 1rem;
+  text-shadow: 0 2px 18px rgba(4,12,18,.92), 0 1px 48px rgba(4,12,18,.8);
+}
+.feld-text {
+  display: block; font-size: clamp(.94rem, 1.05vw, 1.04rem); line-height: 1.6;
+  color: #D8E6EF; margin: 0 0 clamp(1.5rem, 3.5vh, 2.2rem);
+  text-shadow: 0 1px 14px rgba(4,12,18,.95), 0 1px 36px rgba(4,12,18,.85);
+}
+.feld--maeh .feld-text { color: #DEECD5; }
+
+.feld-cta {
+  display: inline-flex; align-items: center; gap: .6rem;
+  font-family: var(--display); font-weight: 700;
+  font-size: clamp(.85rem, .78rem + .3vw, .95rem);
+  white-space: nowrap; max-width: 100%;
+  padding: .9rem clamp(1.1rem, 2vw, 1.7rem); border-radius: 100px;
+  background: var(--eis-knopf); color: var(--weiss);
+  transition: gap .22s, background .22s, box-shadow .22s;
+  box-shadow: 0 6px 26px rgba(0,158,224,.3);
+}
+.feld:hover .feld-cta { gap: 1rem; background: var(--eis-tief); box-shadow: 0 10px 32px rgba(0,158,224,.42); }
+.feld-cta--gesperrt {
+  background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.3);
+  color: #E3EFDB; box-shadow: none;
+}
+.feld:hover .feld-cta--gesperrt { background: rgba(255,255,255,.16); gap: .6rem; box-shadow: none; }
+
+/* Fusszeile: mittig ueber beiden Haelften */
+.tor-fuss {
+  position: absolute; inset: auto 0 0; z-index: 8;
+  padding: 0 1.5rem clamp(1.3rem, 3.2vh, 2.2rem);
+  text-align: center; pointer-events: none;
+}
+.tor-fuss::before {
+  content: ""; position: absolute; inset: auto 0 0; height: 210px; z-index: -1;
+  background: linear-gradient(to top, rgba(4,12,18,.92) 12%, rgba(4,12,18,.5) 55%, transparent);
+  pointer-events: none;
+}
+.tor-fuss a { pointer-events: auto; }
+.tor-tel {
+  display: inline-flex; align-items: center; gap: .7rem;
+  font-family: var(--mono); font-size: clamp(1.15rem, 2.1vw, 1.6rem); font-weight: 500;
+  letter-spacing: .04em; color: var(--weiss); text-decoration: none;
+  padding: .5rem 1.4rem; border-radius: 100px;
+  border: 1px solid rgba(255,255,255,.22); background: rgba(255,255,255,.05);
+  backdrop-filter: blur(8px);
+  transition: border-color .2s, background .2s, transform .2s;
+}
+.tor-tel:hover { border-color: var(--eis-hell); background: rgba(0,158,224,.16); transform: translateY(-2px); }
+.tor-tel svg { flex: none; color: var(--eis-hell); }
+.tor-tel small {
+  font-family: var(--body); font-size: .62rem; letter-spacing: .18em;
+  text-transform: uppercase; color: #90A9BA; margin-right: .1rem;
+}
+.tor-adresse {
+  margin: .95rem 0 .4rem; font-size: .82rem; color: #9DB3C1;
+}
+.tor-links { margin: 0; font-size: .8rem; display: flex; justify-content: center; gap: 1.3rem; flex-wrap: wrap; }
+.tor-links a { color: #9DB3C1; text-decoration: none; }
+.tor-links a:hover { color: var(--weiss); }
+
+/* Auftritt beim Laden */
+.tor:not(.tor--sparsam) .feld-innen > * {
+  animation: tor-auf .9s cubic-bezier(.2,.8,.25,1) backwards;
+}
+.feld-innen > *:nth-child(1) { animation-delay: .35s; }
+.feld-innen > *:nth-child(2) { animation-delay: .44s; }
+.feld-innen > *:nth-child(3) { animation-delay: .53s; }
+.feld-innen > *:nth-child(4) { animation-delay: .62s; }
+.feld-innen > *:nth-child(5) { animation-delay: .71s; }
+@keyframes tor-auf {
+  from { opacity: 0; transform: translateY(14px); filter: blur(4px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+
+/* Die Trennkante zieht sich beim Laden auf */
+.tor:not(.tor--sparsam) .tor-felder::after {
+  animation: kante-auf 1.5s cubic-bezier(.2,.8,.25,1) .25s backwards;
+}
+@keyframes kante-auf { from { transform: translateX(-.5px) scaleY(0); } to { transform: translateX(-.5px) scaleY(1); } }
+
+/* Die Fusszeile kommt zuletzt */
+.tor:not(.tor--sparsam) .tor-fuss > * {
+  animation: tor-auf .8s cubic-bezier(.2,.8,.25,1) backwards;
+}
+.tor-fuss > *:nth-child(1) { animation-delay: .85s; }
+.tor-fuss > *:nth-child(2) { animation-delay: .94s; }
+.tor-fuss > *:nth-child(3) { animation-delay: 1.02s; }
+
+@media (max-width: 859px) {
+  /* Untereinander statt nebeneinander – und der Fuss steht im Fluss, nicht mehr
+     absolut über den Feldern. Zwei volle Felder plus Fusszeile passen auf einem
+     Telefon nicht in einen Bildschirm; vorher lag der Fuss deshalb über dem
+     Mäharbeiten-Text. Lieber ein kurzes Stück scrollen als Text auf Text. */
+  .tor { height: auto; min-height: 100svh; overflow: visible; display: flex; flex-direction: column; }
+  .tor-felder { position: static; flex-direction: column; flex: 1 1 auto; }
+  .tor-felder::after { display: none; }
+  .feld {
+    flex: 0 0 auto; min-height: 46svh;
+    padding: clamp(2rem, 5vh, 3rem) 1.5rem;
+  }
+  .feld--maeh { border-top: 1px solid rgba(255,255,255,.28); }
+  .tor-fuss {
+    position: static; padding-top: 1.6rem;
+    background: var(--nacht);
+  }
+  .tor-fuss::before { display: none; }
+  .feld-titel { font-size: clamp(2.1rem, 10.2vw, 3.4rem); }
+  .feld-logo { height: 34px; margin-bottom: 1rem; }
+  .feld-wortmarke { margin-bottom: 1rem; }}
+
+@media (max-width: 859px) and (max-height: 720px) {
+  .feld-text { display: none; }
+  .feld-saison { margin-bottom: .7rem; }
+  .tor-adresse { display: none; }}
+
+@media (prefers-reduced-motion: reduce) {
+  .tor .feld-innen > *, .tor .feld-bild, .tor .tor-felder::after, .tor .tor-fuss > * { animation: none; }
+  .feld-bild { transform: scale(1.05); }}
+
+@keyframes live-auf { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+@keyframes fakt-auf { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes sinken {
+  0%, 100% { transform: scaleY(.35); opacity: .35; transform-origin: top; }
+  50% { transform: scaleY(1); opacity: 1; transform-origin: top; }
+}
+/* Ankerziele nicht unter die feste Kopfzeile springen lassen */
+section[id], [id^="check-"] { scroll-margin-top: 92px; }
+
+input[type="text"], input[type="email"], input[type="tel"], input[type="time"], input[type="number"], select, textarea {
+  width: 100%; padding: .85rem 1rem;
+  /* Eine feste Höhe für alle Felder – sonst baut der Browser das Zeitfeld
+     wegen seines eigenen Auswahlsymbols ein paar Pixel höher als das Auswahlfeld. */
+  min-height: 3.3rem; line-height: 1.3; font-size: 1rem;
+  background: var(--weiss); color: var(--nacht);
+  border: 1px solid var(--raum-2); border-radius: var(--r);
+  transition: border-color .15s, box-shadow .15s;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none; border-color: var(--eis); box-shadow: 0 0 0 3px rgba(0,158,224,.18);
+}
+textarea { min-height: 118px; resize: vertical; padding-top: .9rem; }
+@keyframes puls {
+  0% { box-shadow: 0 0 0 0 rgba(229,72,77,.5); }
+  70% { box-shadow: 0 0 0 12px rgba(229,72,77,0); }
+  100% { box-shadow: 0 0 0 0 rgba(229,72,77,0); }
+}
+@keyframes dreh { to { transform: rotate(360deg); } }
+@keyframes einblenden { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+/* Balken ohne JavaScript ausblenden – die Zahl daneben sagt dasselbe genauer. */
+html:not(.js) .streu-schiene, html:not(.js) .breite-schiene { display: none; }
+@keyframes zeile-ein { to { opacity: 1; transform: none; } }
+@keyframes balken { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes karte-ein { from { opacity: 0; transform: translateY(14px) scale(.985); } to { opacity: 1; transform: none; } }
+/* Ohne JavaScript stehen die Bänder sofort – sonst bliebe die Uhrzeit unsichtbar */
+.js .zf-fenster { transform: scaleX(0); }
+@keyframes zf-auf { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes pflicht-ein { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes gebiet-zeichnen { from { stroke-dashoffset: 900; } to { stroke-dashoffset: 0; } }
+@keyframes gebiet-linie-ein { from { opacity: 0; } to { opacity: 1; } }
+
+.gebiet-ort { opacity: 0; cursor: default; }
+@keyframes gebiet-ort-ein { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
+
+.gebiet-ort[data-seite] { cursor: pointer; }
+.gebiet-ort[data-seite]:hover text,
+.gebiet-ort[data-seite]:focus-visible text { fill: #fff; }
+.gebiet-ort:focus-visible { outline: 2px solid var(--eis-hell); outline-offset: 4px; border-radius: 4px; }
+@keyframes gebiet-pulsieren {
+  0%   { opacity: .8; transform: scale(.7); }
+  70%  { opacity: 0;  transform: scale(2.1); }
+  100% { opacity: 0;  transform: scale(2.1); }
+}
+@keyframes fuss-puls {
+  0%   { box-shadow: 0 0 0 0 rgba(127,212,143,.55); }
+  70%  { box-shadow: 0 0 0 9px rgba(127,212,143,0); }
+  100% { box-shadow: 0 0 0 0 rgba(127,212,143,0); }
+}
+
+/* WCAG 2.2 verlangt 24 px Trefferfläche – die Schriftgröße bleibt, nur der
+   anklickbare Bereich wächst. */
+.fuss a, .fuss-unten a, .tor-links a, .kontakt-zeile dd a {
+  display: inline-block; padding-block: .18rem;
+}
+
+/* --------------------------------------------------------------- Reveal */
+/* Nur wenn JavaScript läuft, wird für die Einblendung versteckt.
+   Sonst wäre die halbe Seite ohne JavaScript unsichtbar. */
+.js .auf { opacity: 0; transform: translateY(22px); transition: opacity .7s cubic-bezier(.22,.8,.28,1), transform .7s cubic-bezier(.22,.8,.28,1); }
+.js .auf.sichtbar { opacity: 1; transform: none; }
+@keyframes puls-gruen {
+  0% { box-shadow: 0 0 0 0 rgba(255,198,92,.5); }
+  70% { box-shadow: 0 0 0 10px rgba(255,198,92,0); }
+  100% { box-shadow: 0 0 0 0 rgba(255,198,92,0); }
+}
+
+/* --------------------------------------------------------- Leaflet-Feinschliff */
+.leaflet-container { font-family: var(--body); background: var(--nacht-2); }
+.leaflet-control-attribution { font-size: 10px; background: rgba(255,255,255,.8) !important; }
+.leaflet-bar a { color: var(--nacht) !important; }
+@keyframes puls-warn {
+  0% { box-shadow: 0 0 0 0 rgba(43,26,0,.45); }
+  70% { box-shadow: 0 0 0 9px rgba(43,26,0,0); }
+  100% { box-shadow: 0 0 0 0 rgba(43,26,0,0); }
+}
+
+/* --------------------------------------------------------- Saisonmarkierung */
+.saison-marke {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-family: var(--mono); font-size: .66rem; letter-spacing: .16em; text-transform: uppercase;
+  padding: .3rem .7rem; border-radius: 100px; margin-bottom: 1rem;
+  background: rgba(0,158,224,.2); border: 1px solid rgba(92,200,242,.5); color: var(--eis-hell);
+}
+.saison-marke::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--eis-hell); }
+.feld--maeh .saison-marke { background: rgba(159,203,146,.16); border-color: rgba(159,203,146,.45); color: #C4E0B8; }
+.feld--maeh .saison-marke::before { background: #9FCB92; }
+.saison-marke[data-ruhe="true"] { background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.2); color: #A9C3D4; }
+.saison-marke[data-ruhe="true"]::before { background: #7E9BAD; }
+@media (min-width: 860px) {
+  .tor-felder[data-saison="winter"] .feld--winter { flex-basis: 64%; }
+  .tor-felder[data-saison="maeh"] .feld--winter { flex-basis: 52%; }}
+
+/* Die Zeitachse ist ein Bedienelement – ohne JavaScript hätte sie keine Funktion */
+html:not(.js) .achse { display: none; }
+@keyframes wechsel { from { opacity: 0; } to { opacity: 1; } }
+@keyframes funnel-auf { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes spur-fahren {
+  0%   { stroke-dashoffset: 100; }
+  85%  { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 0; }
+}
+@keyframes faq-auf { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+.gebiet-marke--kern    { color: var(--gruen); }
+.gebiet-marke--pruefen { color: var(--salz); }
+.gebiet-marke--aussen  { color: #7E9BAD; }
+.gebiet-satz--kern    { color: #7FD48F; }
+.gebiet-satz--pruefen { color: var(--salz); }
+.gebiet-satz--aussen  { color: #A9C3D4; }

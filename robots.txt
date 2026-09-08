@@ -1,0 +1,4 @@
+# Vorschau-Fassung fuer die Kundenabnahme - nicht die Live-Seite.
+# Indexierung vollstaendig gesperrt.
+User-agent: *
+Disallow: /
