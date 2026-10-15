@@ -1977,3 +1977,115 @@ html:not(.js) .achse { display: none; }
 .objekt-karte-mini { text-align: left; cursor: pointer; width: 100%; }
 .flaeche-farbe { background: var(--flaechenfarbe, var(--eis)); }
 .radar-fenster { font-size: .94rem; color: #C6D8E3; margin-bottom: 1.2rem; }
+/* Gewerbe-Randgebiet (Abgrenzung 06.10.2026) */
+.gebiet-marke--gewerbe { color: #5CC8F2; }
+.gebiet-satz--gewerbe  { color: #8FD6F5; }
+.vorschlag-gebiet[data-status="gewerbe"] { color: #8FD6F5; background: rgba(0,158,224,.16); }
+
+/* ---------------------------------------------- Winternacht: zwei Szenarien */
+.szenario-wahl {
+  display: inline-flex; gap: 4px; padding: 4px; border-radius: 12px;
+  background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .12);
+}
+.szenario-knopf {
+  display: grid; gap: .1rem; text-align: left; padding: .55rem 1rem; border: 0; border-radius: 9px;
+  background: transparent; color: #CFE0EA; font: inherit; font-weight: 700; font-size: .92rem; cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.szenario-knopf small { font-weight: 400; font-size: .74rem; color: #8FA9BC; }
+.szenario-knopf:hover { background: rgba(255, 255, 255, .08); }
+.szenario-knopf[aria-pressed="true"] { background: var(--eis-knopf); color: var(--weiss); }
+.szenario-knopf[aria-pressed="true"] small { color: #D7EEF9; }
+.szenario-knopf:focus-visible { outline: 2px solid var(--eis-hell); outline-offset: 2px; }
+@media (max-width: 620px) {
+  .szenario-wahl { width: 100%; }
+  .szenario-knopf { flex: 1; padding: .5rem .7rem; font-size: .86rem; }
+  .szenario-knopf small { display: none; }
+}
+
+/* ---------------------------------------------------------- Einsatzbilanz */
+.bilanz-gitter { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+@media (max-width: 900px) { .bilanz-gitter { grid-template-columns: minmax(0, 1fr); } }
+.bilanz-karte { border: 1px solid var(--raum-2); border-radius: var(--r-l); padding: clamp(1.3rem, 2.6vw, 2rem); background: var(--weiss); box-shadow: var(--schatten); }
+.bilanz-art { font-family: var(--mono); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--eis-tief); margin: 0 0 .6rem; }
+.bilanz-gesamt { font-family: var(--display); font-weight: 700; font-size: 1.15rem; margin: 0 0 1.2rem; }
+.bilanz-gesamt .zahl { font-size: clamp(2rem, 3.6vw, 2.8rem); letter-spacing: -.03em; margin-right: .35rem; }
+.bilanz-gesamt small { display: block; font-family: var(--body); font-weight: 500; font-size: .92rem; color: var(--stahl-hell); margin-top: .2rem; }
+.bilanz-tabelle { width: 100%; border-collapse: collapse; font-size: .95rem; }
+.bilanz-tabelle th, .bilanz-tabelle td { padding: .6rem .4rem; text-align: left; border-bottom: 1px solid var(--raum-2); vertical-align: baseline; }
+.bilanz-tabelle thead th { font-family: var(--mono); font-weight: 500; font-size: .66rem; letter-spacing: .14em; text-transform: uppercase; color: var(--stahl-hell); }
+.bilanz-tabelle tbody th { font-weight: 600; }
+.bilanz-tabelle tbody th small { display: block; font-weight: 400; color: var(--stahl-hell); font-size: .82rem; }
+.bilanz-tabelle td.zahl { font-family: var(--mono); white-space: nowrap; }
+.bilanz-tabelle td:first-child { width: 3.2rem; }
+.bilanz-tabelle td:last-child, .bilanz-tabelle th:last-child { text-align: right; }
+.bilanz-tabelle tfoot th, .bilanz-tabelle tfoot td { border-bottom: 0; border-top: 2px solid var(--nacht); font-weight: 700; padding-top: .8rem; }
+@media (max-width: 480px) { .bilanz-tabelle thead th:nth-child(3), .bilanz-tabelle td:nth-child(3) { display: none; } }
+
+/* -------------------------------------------- Sammelnachweis (statt Protokoll) */
+.sammel-daten { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin: 0 0 1.2rem; border: 1px solid var(--raum-2); border-radius: 10px; overflow: hidden; }
+.sammel-daten div { padding: .65rem .8rem; border-right: 1px solid var(--raum-2); border-bottom: 1px solid var(--raum-2); }
+.sammel-daten div:nth-child(4n) { border-right: 0; }
+.sammel-daten div:nth-last-child(-n+4) { border-bottom: 0; }
+.sammel-daten dt { font-family: var(--mono); font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--stahl-hell); margin-bottom: .15rem; }
+.sammel-daten dd { margin: 0; font-size: .9rem; font-weight: 600; color: var(--nacht); line-height: 1.35; }
+@media (max-width: 760px) {
+  .sammel-daten { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sammel-daten div:nth-child(4n) { border-right: 1px solid var(--raum-2); }
+  .sammel-daten div:nth-child(2n) { border-right: 0; }
+  .sammel-daten div:nth-last-child(-n+4) { border-bottom: 1px solid var(--raum-2); }
+  .sammel-daten div:nth-last-child(-n+2) { border-bottom: 0; }
+}
+.sammel-bilder { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.sammel-bild { margin: 0; }
+.sammel-bild figcaption { font-family: var(--mono); font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--stahl-hell); margin-bottom: .45rem; }
+.sammel-bild .objektplan, .sammel-bild .beleg-spur { display: block; width: 100%; aspect-ratio: 1; height: auto; }
+.objektplan text { font-family: var(--body); }
+.beleg-hinweis { margin: .9rem 0 0; font-size: .8rem; color: var(--stahl-hell); }
+
+/* --------------------------------------------------------- Streugutlager */
+.streulager { display: flex; gap: 1.1rem; align-items: flex-start; margin-top: 1.4rem; padding: 1.3rem 1.5rem; border-radius: var(--r-l); background: var(--raum); border: 1px solid var(--raum-2); }
+.streulager-ikon { flex: none; width: 52px; height: 52px; border-radius: 12px; display: grid; place-items: center; background: var(--weiss); color: var(--eis-tief); }
+.streulager h3 { font-size: 1.1rem; margin: 0 0 .3rem; }
+.streulager p { margin: 0; color: var(--stahl); }
+
+/* ------------------------------------------- Einsatzgebiet: drei Bereiche */
+.zonen { display: grid; gap: .7rem; margin: 1.6rem 0 1.4rem; }
+.zone { position: relative; padding: .9rem 1rem .9rem 1.25rem; border-radius: 10px; background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .1); }
+.zone::before { content: ""; position: absolute; left: 0; top: .9rem; bottom: .9rem; width: 3px; border-radius: 0 3px 3px 0; }
+.zone--gehwege::before { background: #BFE9FA; }
+.zone--gewerbe::before { background: #5CC8F2; }
+.zone--strasse::before { background: #2A7FA8; }
+.zone h3 { font-size: 1rem; margin: 0 0 .2rem; color: var(--weiss); }
+.zone p { margin: 0; font-size: .92rem; color: #A9C3D4; line-height: 1.55; }
+.gebiet-legende-gehwege::before { background: #5CC8F2; box-shadow: 0 0 0 2px #BFE9FA; }
+.gebiet-legende-gewerbe::before { background: rgba(0, 158, 224, .45); box-shadow: 0 0 0 1.5px #5CC8F2; }
+.gebiet-legende-strasse::before { background: rgba(0, 158, 224, .15); box-shadow: 0 0 0 1.5px rgba(92, 200, 242, .5); }
+/* Vier Fahrzeugklassen: vier Spalten am Desktop, zwei darunter */
+.fuhrpark-gitter { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1180px) { .fuhrpark-gitter { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 620px) { .fuhrpark-gitter { grid-template-columns: minmax(0, 1fr); } }
+
+/* ----------------------------------------------------------------- Lieder */
+.lieder-gitter { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem clamp(2rem, 5vw, 4rem); align-items: center; }
+@media (max-width: 900px) { .lieder-gitter { grid-template-columns: minmax(0, 1fr); } }
+.lieder { list-style: none; margin: 0; padding: 0; display: grid; gap: .7rem; }
+.lied { display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.2rem; border-radius: var(--r-l); background: var(--weiss); border: 1px solid var(--raum-2); box-shadow: var(--schatten); }
+.lied-ikon { flex: none; width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: var(--raum); color: var(--eis-tief); }
+.lied-text { display: grid; gap: .2rem; min-width: 0; }
+.lied-text strong { font-size: 1.05rem; }
+.lied-text small { font-size: .9rem; color: var(--stahl-hell); }
+.lied--bald { border-style: dashed; box-shadow: none; background: transparent; }
+
+/* Schmale Bildschirme: nichts darf seitlich überstehen */
+.hero { overflow: hidden; }
+.tabelle-rolle { display: block; max-width: 100%; overflow-x: auto; }
+@media (max-width: 420px) {
+  .bilanz-karte { padding: 1.1rem .9rem; }
+  .bilanz-tabelle { font-size: .84rem; }
+  .bilanz-tabelle th, .bilanz-tabelle td { padding: .5rem .25rem; }
+  .bilanz-tabelle td:first-child { width: 2rem; }
+}
+.bilanz-tabelle tbody th, .bilanz-tabelle tfoot th { hyphens: auto; -webkit-hyphens: auto; overflow-wrap: anywhere; }
+@media (max-width: 420px) { .bilanz-tabelle { font-size: .8rem; } .bilanz-tabelle td.zahl { white-space: normal; } }
+@media (max-width: 420px) { h1, h2 { hyphens: auto; -webkit-hyphens: auto; } }

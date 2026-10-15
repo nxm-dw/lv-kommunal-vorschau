@@ -101,7 +101,7 @@
           '<div><label class="etikett" for="f-text">Was sollten wir noch wissen?</label>' +
             '<textarea id="f-text" placeholder="Besondere Gefahrenstellen, Zufahrt, Schlüssel …"></textarea></div>' +
           '<label class="zustimmung"><input type="checkbox" id="f-ok" required>' +
-            '<span>Ich habe die <a href="datenschutz.html">Datenschutzerklärung</a> gelesen und bin mit der ' +
+            '<span>Ich habe die <a href="datenschutz">Datenschutzerklärung</a> gelesen und bin mit der ' +
             "Speicherung meiner Angaben zur Bearbeitung der Anfrage einverstanden.</span></label>" +
           '<div><button class="btn btn-primaer" type="submit">Angebot anfordern</button></div>' +
           '<p id="funnel-status" aria-live="polite"></p>' +

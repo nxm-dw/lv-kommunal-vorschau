@@ -559,3 +559,267 @@ html:not(.js) .achse { display: none; }
 .gebiet-satz--kern    { color: #7FD48F; }
 .gebiet-satz--pruefen { color: var(--salz); }
 .gebiet-satz--aussen  { color: #A9C3D4; }
+/* Gewerbe-Randgebiet (Abgrenzung 06.10.2026) */
+.gebiet-marke--gewerbe { color: #5CC8F2; }
+.gebiet-satz--gewerbe  { color: #8FD6F5; }
+.vorschlag-gebiet[data-status="gewerbe"] { color: #8FD6F5; background: rgba(0,158,224,.16); }
+
+
+/* ==========================================================================
+   MÄHARBEITEN – Übersicht und Unterseiten (maeharbeiten*.html)
+   Von Hand ergänzt, nicht aus style.css erzeugt. Wer css-aufteilen.py erneut
+   laufen lässt, muss diesen Block wieder anhängen.
+
+   Teil 1 übernimmt unverändert die Bausteine der Winterdienst-Stadtseiten
+   (Hero mit Brotkrümel, Sektionen, Eyebrow, Merkmale, Leistungen, Fuß),
+   damit beide Bereiche dieselbe Formensprache sprechen.
+   Teil 2 setzt die Grünpflege-Töne, die schon die Bereichsauswahl und die
+   frühere Platzhalterseite verwendet haben (#9FCB92, #C4E0B8, Dunkelgrün).
+   Teil 3 sind die neuen Bausteine: Hero-Foto als <picture>, Kacheln,
+   Bild mit Bildunterschrift, Vergleich zweier Mähköpfe.
+   ========================================================================== */
+
+/* ------------------------------------------- Teil 1: Bausteine aus winterdienst.css */
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.d-xl { font-size: clamp(2.7rem, 7.8vw, 5.9rem); font-weight: 700; }
+.d-m  { font-size: clamp(1.5rem, 2.6vw, 2.2rem); line-height: 1.14; font-weight: 700; }
+.eyebrow {
+  font-family: var(--mono); font-size: .72rem; font-weight: 500;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--eis);
+  display: flex; align-items: center; gap: .7rem; margin: 0 0 1.1rem;
+}
+.eyebrow::before { content: ""; width: 26px; height: 2px; background: var(--eis); flex: none; }
+.eyebrow.grau { color: var(--stahl); }
+.eyebrow.grau::before { background: var(--stahl); }
+.zahl { font-family: var(--mono); font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+
+.hero {
+  position: relative; min-height: 100svh;
+  display: flex; align-items: center;
+  background: #060F17; color: var(--weiss); overflow: hidden;
+  padding: 7rem 0 5rem;
+}
+.hero-schleier { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.hero-innen { position: relative; z-index: 3; }
+.hero h1, .hero-lead, .hero .eyebrow { text-shadow: 0 2px 26px rgba(4,11,17,.92), 0 1px 60px rgba(4,11,17,.7); }
+.hero h1 { margin: 0 0 1.4rem; }
+.hero-lead { max-width: 46ch; font-size: clamp(1.05rem, 1.5vw, 1.22rem); color: #CFE0EA; margin-bottom: 2.2rem; }
+.hero--stadt { min-height: 68svh; padding: 8rem 0 4rem; }
+.brotkrumen {
+  font-family: var(--mono); font-size: .72rem; letter-spacing: .12em;
+  color: #7E9BAD; margin: 0 0 1.2rem;
+}
+.brotkrumen a { color: #A9C3D4; text-decoration: none; }
+.brotkrumen a:hover { color: var(--eis-hell); }
+.brotkrumen span { margin: 0 .5rem; }
+.eng-kopf { max-width: 16ch; }
+
+.sek { padding: var(--sec-y) 0; position: relative; }
+.sek-hell { background: var(--weiss); }
+.sek-raum { background: var(--raum); }
+.nacht, .sek-nacht { background: var(--nacht); color: var(--weiss); }
+.sek-nacht h2, .sek-nacht h3 { color: var(--weiss); }
+.sek-kopf { max-width: 1040px; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+.sek-kopf h2 { margin-bottom: 1rem; }
+.zwei-spalten {
+  display: grid; gap: clamp(2rem, 4vw, 4rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start;
+}
+@media (max-width: 880px) { .zwei-spalten { grid-template-columns: 1fr; }}
+
+.merkmale { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.6rem; margin-top: 2.5rem; }
+.merkmal { border-top: 2px solid var(--eis); padding-top: 1.1rem; }
+.merkmal h3 { font-size: 1.05rem; margin-bottom: .5rem; }
+.merkmal p { font-size: .93rem; color: var(--stahl); }
+.sek-nacht .merkmal p { color: #A9C3D4; }
+
+.leistungen { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1px; background: var(--raum-2); border: 1px solid var(--raum-2); margin-top: 2.5rem; }
+.leistung { background: var(--weiss); padding: 1.4rem 1.3rem; }
+.leistung dt { font-family: var(--display); font-weight: 700; font-size: 1rem; margin-bottom: .4rem; }
+.leistung dd { margin: 0; font-size: .9rem; color: var(--stahl); }
+
+.nachbar { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.6rem; }
+.nachbar a {
+  padding: .5rem 1rem; border: 1px solid var(--raum-2); border-radius: 100px;
+  font-size: .9rem; text-decoration: none; transition: all .15s;
+}
+.nachbar a:hover { border-color: var(--eis); color: var(--eis); }
+.sek-nacht .nachbar a { border-color: rgba(255,255,255,.2); color: #C6D8E3; }
+.sek-nacht .nachbar a:hover { border-color: var(--eis-hell); color: var(--eis-hell); }
+
+.fuss-gitter {
+  display: grid; grid-template-columns: 1.5fr repeat(3, 1fr); gap: 2.5rem;
+  padding-top: clamp(2.6rem, 5vw, 4rem); margin-bottom: 2.6rem;
+}
+@media (max-width: 900px) { .fuss-gitter { grid-template-columns: 1fr 1fr; gap: 2.2rem; }}
+@media (max-width: 560px) { .fuss-gitter { grid-template-columns: 1fr; gap: 2rem; }}
+
+.abstand-o      { margin-top: 1rem; }
+.ohne-abstand-o { margin-top: 0; }
+.text-m         { font-size: .92rem; }
+.eng            { max-width: 34ch; }
+.mittig-text    { text-align: center; }
+.mittig-lead    { margin: 1rem auto 2rem; }
+
+/* ------------------------------------------------- Teil 2: Grünpflege-Töne
+   Kontraste (WCAG 2.2 AA): #2F5A27 auf Weiß 8,0:1 und auf --raum 7,3:1,
+   #9FCB92 auf #0B1C0F 9,6:1, #C9DDBF auf #0B1C0F 13:1. Weiße Schrift auf
+   #2F5A27 (Knopf) 8,0:1. Linien in #4C8C3F erreichen auf Weiß 4,1:1. */
+.bereich-maeh .eyebrow { color: #2F5A27; }
+.bereich-maeh .eyebrow::before,
+.bereich-maeh .merkmal { border-color: #4C8C3F; }
+.bereich-maeh .eyebrow::before { background: #4C8C3F; }
+.bereich-maeh .hero .eyebrow,
+.bereich-maeh .sek-nacht .eyebrow { color: #9FCB92; }
+.bereich-maeh .hero .eyebrow::before,
+.bereich-maeh .sek-nacht .eyebrow::before { background: #9FCB92; }
+
+.bereich-maeh .btn-primaer { background: #2F5A27; border-color: #2F5A27; color: var(--weiss); }
+.bereich-maeh .btn-primaer:hover { background: #23451D; border-color: #23451D; }
+.bereich-maeh .hero .btn-primaer,
+.bereich-maeh .sek-nacht .btn-primaer { background: #F1F5F8; border-color: #F1F5F8; color: #12290F; box-shadow: none; }
+.bereich-maeh .hero .btn-primaer:hover,
+.bereich-maeh .sek-nacht .btn-primaer:hover { background: var(--weiss); border-color: var(--weiss); }
+
+.bereich-maeh .hero { background: #0B1C0F; }
+.bereich-maeh .hero-lead { color: #DCEBD2; }
+.bereich-maeh .hero h1, .bereich-maeh .hero-lead { text-shadow: 0 2px 26px rgba(7,20,10,.9), 0 1px 60px rgba(7,20,10,.7); }
+.bereich-maeh .brotkrumen { color: #9FCB92; }
+/* Lange Seitennamen dürfen in die nächste Zeile umbrechen */
+.bereich-maeh .brotkrumen { display: flex; flex-wrap: wrap; align-items: baseline; row-gap: .2rem; }
+.bereich-maeh .brotkrumen a { color: #DCEBD2; text-decoration: underline; text-decoration-color: rgba(220,235,210,.35); text-underline-offset: 3px; }
+.bereich-maeh .brotkrumen a:hover { color: var(--weiss); text-decoration-color: currentColor; }
+/* Wie die frühere Platzhalterseite: links dunkel für den Text, rechts Motiv */
+.bereich-maeh .hero-schleier {
+  background:
+    linear-gradient(100deg, rgba(7,20,10,.93) 0%, rgba(7,20,10,.82) 38%,
+                    rgba(7,20,10,.42) 68%, rgba(7,20,10,.18) 100%),
+    linear-gradient(to top, rgba(7,20,10,.8) 0%, transparent 50%);
+}
+@media (max-width: 860px) {
+  .bereich-maeh .hero-schleier {
+    background: linear-gradient(to bottom, rgba(7,20,10,.45) 0%, rgba(7,20,10,.78) 34%, rgba(7,20,10,.9) 100%);
+  }}
+
+.bereich-maeh .sek-nacht,
+.bereich-maeh .fuss { background: #0B1C0F; }
+.bereich-maeh .sek-nacht .lead { color: #C9DDBF; }
+.bereich-maeh .sek-nacht .nachbar a { border-color: rgba(196,224,184,.3); color: #DCEBD2; }
+.bereich-maeh .sek-nacht .nachbar a:hover { border-color: #C4E0B8; color: var(--weiss); }
+.bereich-maeh .fuss { color: #C9DDBF; }
+.bereich-maeh .fuss-unten { border-color: rgba(196,224,184,.14); }
+
+/* ------------------------------------------------- Teil 3: neue Bausteine */
+/* Hero-Foto als <picture> statt Hintergrundbild: kommt ohne JavaScript und
+   ohne Inline-Stil aus und hat einen Alternativtext. */
+.hero-foto { position: absolute; inset: 0; z-index: 0; }
+.hero-foto img { width: 100%; height: 100%; object-fit: cover; object-position: 60% 50%; }
+.hero-foto--oben img  { object-position: 55% 30%; }
+.hero-foto--unten img { object-position: 55% 72%; }
+.hero-foto--links img { object-position: 30% 50%; }
+
+.hero-saison {
+  display: inline-flex; align-items: center; gap: .55rem;
+  font-family: var(--mono); font-size: .7rem; letter-spacing: .16em; text-transform: uppercase;
+  color: #C4E0B8; border: 1px solid rgba(159,203,146,.45); border-radius: 100px;
+  background: rgba(6,18,9,.6); padding: .35rem .9rem; margin: 0 0 1.2rem;
+}
+.hero-saison::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #9FCB92; }
+
+/* Kacheln der sechs Leistungen */
+.maeh-karten {
+  display: grid; gap: clamp(1rem, 2vw, 1.5rem);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+}
+.maeh-karte {
+  display: flex; flex-direction: column; height: 100%;
+  background: var(--weiss); color: var(--nacht); text-decoration: none;
+  border: 1px solid var(--raum-2); border-radius: var(--r-l); overflow: hidden;
+  transition: border-color .18s, box-shadow .18s, transform .18s;
+}
+.maeh-karte:hover { border-color: #4C8C3F; box-shadow: var(--schatten); transform: translateY(-3px); }
+.maeh-karte:focus-visible { outline: 3px solid #2F5A27; outline-offset: 3px; }
+.maeh-karte picture { display: block; aspect-ratio: 16 / 10; overflow: hidden; background: var(--raum-2); }
+.maeh-karte img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.maeh-karte:hover img { transform: scale(1.04); }
+.maeh-karte-text { display: flex; flex-direction: column; gap: .55rem; padding: 1.3rem 1.4rem 1.4rem; flex: 1; }
+.maeh-karte h3 { font-size: 1.15rem; line-height: 1.2; }
+.maeh-karte p { font-size: .93rem; color: var(--stahl); margin: 0; }
+.maeh-karte-mehr {
+  margin-top: auto; padding-top: .5rem;
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-family: var(--display); font-weight: 700; font-size: .9rem; color: #2F5A27;
+}
+.maeh-karte-mehr svg { transition: transform .18s; }
+.maeh-karte:hover .maeh-karte-mehr svg { transform: translateX(4px); }
+.maeh-karten--klein .maeh-karte picture { aspect-ratio: 16 / 9; }
+.maeh-karten--klein .maeh-karte h3 { font-size: 1.02rem; }
+
+/* Foto im Fließtext */
+.maeh-bild { margin: 0; }
+.maeh-bild img { width: 100%; height: auto; border-radius: var(--r-l); }
+.maeh-bild--hoch img { aspect-ratio: 4 / 5; object-fit: cover; }
+.maeh-bild figcaption { margin-top: .7rem; font-size: .82rem; line-height: 1.5; color: var(--stahl-hell); }
+.maeh-bilder { display: grid; gap: 1rem; grid-template-columns: 1fr 1fr; }
+@media (max-width: 560px) { .maeh-bilder { grid-template-columns: 1fr; }}
+
+/* Zwei Werkzeuge nebeneinander, z. B. Schlegel- und Häcksel-Mähkopf */
+.maeh-vergleich { display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+.maeh-vergleich-feld {
+  background: var(--weiss); border: 1px solid var(--raum-2); border-top: 3px solid #4C8C3F;
+  border-radius: var(--r); padding: 1.5rem 1.4rem;
+}
+.maeh-vergleich-feld h3 { font-size: 1.2rem; margin-bottom: .7rem; }
+.maeh-vergleich-feld p { font-size: .95rem; color: var(--stahl); }
+.maeh-liste { display: grid; gap: .5rem; margin-top: 1rem; }
+.maeh-liste li { display: flex; gap: .6rem; align-items: flex-start; font-size: .93rem; line-height: 1.5; color: var(--stahl); }
+.maeh-liste svg { flex: none; margin-top: .25rem; color: #4C8C3F; }
+
+.maeh-absatz { margin-top: clamp(2.5rem, 5vw, 3.5rem); }
+.maeh-absatz h3 { margin-bottom: 1rem; }
+.lead + .lead { margin-top: 1rem; }
+
+/* Kontakt-Abschluss */
+.maeh-kontakt-daten { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem 1.6rem; margin-top: 1.6rem; font-size: .9rem; color: #C9DDBF; }
+.maeh-kontakt-daten a { color: #DCEBD2; }
+.maeh-weiter { margin-top: 2.6rem; padding-top: 1.6rem; border-top: 1px solid rgba(196,224,184,.16); }
+.maeh-weiter h3 { font-family: var(--mono); font-size: .7rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: #9FCB92; }
+.maeh-weiter .nachbar { justify-content: center; margin-top: 1rem; }
+
+/* Lange zusammengesetzte Wörter (Straßenbegleitgrün, Straßenbaulastträger)
+   passen bei der Winterdienst-Mindestgröße nicht in 390 px. Die Untergrenze
+   sinkt deshalb nur im Mäh-Bereich; ab rund 450 px greift wieder vw. */
+.bereich-maeh .d-xl { font-size: clamp(1.9rem, 7.8vw, 5.9rem); }
+.bereich-maeh .d-l  { font-size: clamp(1.7rem, 4.7vw, 3.7rem); }
+.bereich-maeh .eng-kopf { max-width: 13em; }
+/* Für Seitentitel mit sehr langen Komposita (Regenrückhaltebecken) */
+.bereich-maeh .d-xl--lang { font-size: clamp(1.4rem, 6.1vw, 4.6rem); max-width: none; }
+@media (max-width: 560px) {
+  .bereich-maeh .d-xl { font-size: clamp(1.55rem, 7.3vw, 2.7rem); }
+  .bereich-maeh .d-xl--lang { font-size: clamp(1.4rem, 6.1vw, 2.7rem); }
+  .bereich-maeh .d-l  { font-size: clamp(1.7rem, 7.6vw, 2.05rem); }
+}
+/* Nur auf sehr schmalen Geräten (unter 360 px) dürfen lange Komposita
+   getrennt werden, sonst liefe die Zeile aus dem Bild. */
+@media (max-width: 359px) {
+  .bereich-maeh h1, .bereich-maeh h2, .bereich-maeh h3 { hyphens: auto; overflow-wrap: break-word; }
+}
+
+@media (max-width: 700px) {
+  .hero--stadt { min-height: 0; padding: 7.5rem 0 3.2rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .maeh-karte, .maeh-karte img, .maeh-karte-mehr svg { transition: none; }
+  .maeh-karte:hover, .maeh-karte:hover img { transform: none; }
+}
+
+/* Schmale Bildschirme: nichts darf seitlich überstehen */
+.hero { overflow: hidden; }
+.tabelle-rolle { display: block; max-width: 100%; overflow-x: auto; }
+@media (max-width: 420px) {
+  .bilanz-karte { padding: 1.1rem .9rem; }
+  .bilanz-tabelle { font-size: .84rem; }
+  .bilanz-tabelle th, .bilanz-tabelle td { padding: .5rem .25rem; }
+  .bilanz-tabelle td:first-child { width: 2rem; }
+}
+@media (max-width: 420px) { h1, h2 { hyphens: auto; -webkit-hyphens: auto; } }

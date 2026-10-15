@@ -48,9 +48,12 @@
   });
 
   var ersteArt = $("flaechen-arten").querySelector(".wahl");
+  /* Gehwege werden in Laufmetern erfasst (Linie), alle anderen Flächen in Quadratmetern */
+  var istLinie = function (art) { return art === "Gehweg"; };
   var aktiveArt = {
     art: ersteArt.getAttribute("data-wert"),
-    farbe: ersteArt.getAttribute("data-farbe")
+    farbe: ersteArt.getAttribute("data-farbe"),
+    linie: istLinie(ersteArt.getAttribute("data-wert"))
   };
 
 
@@ -100,10 +103,10 @@
       }
       treffer.innerHTML = '<p class="etikett">Welche Adresse ist es?</p><div class="objekt-liste">' +
         liste.map(function (f, i) {
-          var g = LVK.gebiet(f.properties.postcode);
+          var g = LVK.gebiet(f.properties);
           var marke = g
             ? '<span class="gebiet-marke gebiet-marke--' + g.status + '">' +
-              (g.status === "kern" ? "Kerngebiet" : g.status === "pruefen" ? "Randgebiet" : "außerhalb") + "</span>"
+              LVK.gebietMarke(g.status) + "</span>"
             : "";
           return '<button type="button" class="objekt-karte-mini" data-i="' + i + '">' +
             "<strong>" + LVK.sicher(LVK.beschriften(f.properties)) + "</strong>" + marke + "</button>";
@@ -122,7 +125,7 @@
 
   function waehleAdresse(f) {
     var p = f.properties, c = f.geometry.coordinates;
-    var g = LVK.gebiet(p.postcode);
+    var g = LVK.gebiet(p);
 
     objekte.push({
       bezeichnung: LVK.beschriften(p),
@@ -229,6 +232,19 @@
     return Math.abs(summe * R * R / 2);
   }
 
+  /* Länge einer Linie in Metern (Haversine), für Gehwege */
+  function laengeM(punkte) {
+    var R = 6371008.8, rad = Math.PI / 180, summe = 0;
+    for (var i = 1; i < punkte.length; i++) {
+      var a = punkte[i - 1], b = punkte[i];
+      var dLat = (b.lat - a.lat) * rad, dLng = (b.lng - a.lng) * rad;
+      var h = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(a.lat * rad) * Math.cos(b.lat * rad) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+      summe += 2 * R * Math.asin(Math.sqrt(h));
+    }
+    return summe;
+  }
+
   function aufKarteGeklickt(e) {
     entwurf.push(e.latlng);
     zeichneEntwurf();
@@ -240,7 +256,9 @@
     entwurfPunkte = [];
 
     if (entwurf.length) {
-      entwurfLinie = entwurf.length > 2
+      entwurfLinie = aktiveArt.linie
+        ? L.polyline(entwurf, { color: aktiveArt.farbe, weight: 6, opacity: .85, dashArray: "8 6" })
+        : entwurf.length > 2
         ? L.polygon(entwurf, { color: aktiveArt.farbe, weight: 2, fillOpacity: 0.28, dashArray: "5 4" })
         : L.polyline(entwurf, { color: aktiveArt.farbe, weight: 2, dashArray: "5 4" });
       entwurfLinie.addTo(karte);
@@ -252,13 +270,34 @@
       });
     }
 
-    $("flaeche-fertig").disabled = entwurf.length < 3;
+    var mindest = aktiveArt.linie ? 2 : 3;
+    $("flaeche-fertig").disabled = entwurf.length < mindest;
+    $("flaeche-fertig").textContent = aktiveArt.linie ? "Gehweg abschließen" : "Fläche abschließen";
     $("flaeche-zurueck").disabled = entwurf.length === 0;
 
     var tipp = $("karte-tipp");
+    if (aktiveArt.linie) {
+      if (entwurf.length === 0) tipp.textContent = "Gehweg entlang des Wegs anklicken – Anfang, Knicke, Ende. Gemessen wird in Laufmetern.";
+      else if (entwurf.length < 2) tipp.textContent = "Noch einen Punkt bis zur ersten Strecke.";
+      else tipp.textContent = "Aktuell " + formatQm(laengeM(entwurf)) + " Laufmeter. Gehweg abschließen oder weitere Punkte setzen.";
+      return;
+    }
     if (entwurf.length === 0) tipp.textContent = "Ecken anklicken – ab drei Punkten wird die Fläche berechnet.";
     else if (entwurf.length < 3) tipp.textContent = "Noch " + (3 - entwurf.length) + " Punkt(e) bis zur ersten Fläche.";
     else tipp.textContent = "Aktuell " + formatQm(flaecheQm(entwurf)) + " Quadratmeter. Fläche abschließen oder weitere Ecken setzen.";
+  }
+
+  /* Menge einer erfassten Fläche: Gehwege in Laufmetern, alles andere in Quadratmetern */
+  function menge(x) {
+    return x.lm ? formatQm(x.lm) + " Laufmeter" : formatQm(x.qm) + " Quadratmeter";
+  }
+  function summeText(liste) {
+    var qm = 0, lm = 0;
+    liste.forEach(function (x) { qm += x.qm || 0; lm += x.lm || 0; });
+    var teile = [];
+    if (qm > 0 || !lm) teile.push(formatQm(qm) + " Quadratmeter");
+    if (lm > 0) teile.push(formatQm(lm) + " Laufmeter");
+    return teile.join(" · ");
   }
 
   function formatQm(n) {
@@ -271,6 +310,17 @@
   });
 
   $("flaeche-fertig").addEventListener("click", function () {
+    if (aktiveArt.linie) {
+      if (entwurf.length < 2) return;
+      var lm = laengeM(entwurf);
+      var weg = L.polyline(entwurf, { color: aktiveArt.farbe, weight: 7, opacity: .9 }).addTo(karte);
+      weg.bindTooltip(aktiveArt.art + ": " + formatQm(lm) + " Laufmeter", { permanent: false });
+      objekte[aktuell].flaechen.push({ art: aktiveArt.art, farbe: aktiveArt.farbe, qm: 0, lm: lm, ebene: weg });
+      entwurf = [];
+      zeichneEntwurf();
+      listeFlaechen();
+      return;
+    }
     if (entwurf.length < 3) return;
     var qm = flaecheQm(entwurf);
     var form = L.polygon(entwurf, {
@@ -294,7 +344,7 @@
       c.classList.toggle("aktiv", an);
       c.setAttribute("aria-checked", String(an));
     });
-    aktiveArt = { art: k.getAttribute("data-wert"), farbe: k.getAttribute("data-farbe") };
+    aktiveArt = { art: k.getAttribute("data-wert"), farbe: k.getAttribute("data-farbe"), linie: istLinie(k.getAttribute("data-wert")) };
     zeichneEntwurf();
   });
 
@@ -305,7 +355,7 @@
       return '<li class="flaeche-zeile">' +
         '<span class="flaeche-farbe" data-farbe="' + LVK.sicher(x.farbe) + '"></span>' +
         '<span class="flaeche-art">' + x.art + "</span>" +
-        '<span class="flaeche-qm">' + formatQm(x.qm) + " Quadratmeter</span>" +
+        '<span class="flaeche-qm">' + menge(x) + "</span>" +
         '<button class="flaeche-weg" type="button" data-weg="' + i + '" aria-label="' + x.art + " entfernen\">&times;</button></li>";
     }).join("");
 
@@ -324,8 +374,7 @@
       });
     });
 
-    var summe = f.reduce(function (a, x) { return a + x.qm; }, 0);
-    $("summe-qm").textContent = formatQm(summe);
+    $("summe-text").textContent = summeText(f);
     $("zu-schritt-3").disabled = f.length === 0;
   }
 
@@ -369,7 +418,7 @@
     $("adresse").value = "";
     treffer.innerHTML = "";
     $("flaechen-liste").innerHTML = "";
-    $("summe-qm").textContent = "0";
+    $("summe-text").textContent = "0 Quadratmeter";
     $("zu-schritt-3").disabled = true;
     zeigeSchritt(1);
     $("adresse").focus();
@@ -377,14 +426,15 @@
 
   /* ------------------------------------------- Schritt 4: Zusammenfassung */
   $("zu-schritt-4").addEventListener("click", function () {
-    var gesamt = 0;
+    var gesamt = 0, gesamtLm = 0;
     objekte.forEach(function (o) {
-      o.flaechen.forEach(function (f) { gesamt += f.qm; });
+      o.flaechen.forEach(function (f) { gesamt += f.qm; gesamtLm += f.lm || 0; });
     });
     $("bilanz-qm").textContent = formatQm(gesamt);
+    $("bilanz-lm").textContent = formatQm(gesamtLm);
+    $("bilanz-lm-zeile").hidden = !(gesamtLm > 0);
 
     $("bilanz-objekte").innerHTML = objekte.map(function (o) {
-      var qm = o.flaechen.reduce(function (a, f) { return a + f.qm; }, 0);
       var arten = o.flaechen.map(function (f) { return f.art; });
       var einmalig = arten.filter(function (a, i) { return arten.indexOf(a) === i; });
       return '<li class="objekt-karte-mini">' +
@@ -392,7 +442,7 @@
         "<span>" + LVK.sicher(o.objektart) + " · sicher ab " +
         LVK.sicher(o.betriebsbeginn) + " Uhr · " +
         LVK.sicher(einmalig.join(", ") || "keine Fläche erfasst") + "</span></div>" +
-        '<span class="flaeche-qm">' + formatQm(qm) + " Quadratmeter</span></li>";
+        '<span class="flaeche-qm">' + summeText(o.flaechen) + "</span></li>";
     }).join("");
 
     /* Preisspanne erscheint nur, wenn in daten.js freigeschaltet */
@@ -436,11 +486,14 @@
           bereitschaft: o.bereitschaft,
           gefahren: o.gefahren,
           gesamtQm: Math.round(o.flaechen.reduce(function (a, f) { return a + f.qm; }, 0)),
+          gehwegLaufmeter: Math.round(o.flaechen.reduce(function (a, f) { return a + (f.lm || 0); }, 0)),
           flaechen: o.flaechen.map(function (f) {
+            var ll = f.ebene.getLatLngs();
             return {
               art: f.art,
               qm: Math.round(f.qm),
-              punkte: f.ebene.getLatLngs()[0].map(function (p) {
+              laufmeter: f.lm ? Math.round(f.lm) : undefined,
+              punkte: (Array.isArray(ll[0]) ? ll[0] : ll).map(function (p) {
                 return [Number(p.lat.toFixed(6)), Number(p.lng.toFixed(6))];
               })
             };

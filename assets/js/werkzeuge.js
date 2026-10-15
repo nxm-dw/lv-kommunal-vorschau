@@ -49,7 +49,7 @@
 
   var BEZUG = { lat: 50.14, lon: 8.15 };   // Taunusstein, Ortsbezug fuer die Suche
 
-  var RANG = { kern: 0, pruefen: 1, aussen: 2 };
+  var RANG = { kern: 0, gewerbe: 1, pruefen: 2, aussen: 3 };
 
   /* Maskiert alles, was aus fremder Hand kommt – Antworten der Geocoder und
      alles, was der Nutzer eintippt. Ohne das landet fremdes Markup im Dokument. */
@@ -75,8 +75,8 @@
          bleibt die Reihenfolge des Geocoders erhalten. */
       return treffer
         .map(function (f, i) {
-          var g = LVK.gebiet(f.properties.postcode);
-          return { f: f, rang: g ? RANG[g.status] : 3, i: i };
+          var g = LVK.gebiet(f.properties);
+          return { f: f, rang: g ? RANG[g.status] : 4, i: i };
         })
         .sort(function (a, b) { return a.rang - b.rang || a.i - b.i; })
         .map(function (x) { return x.f; })
@@ -165,10 +165,10 @@
           .filter(Boolean).join("");
         if (!haupt) haupt = p.city || p.county || p.state || "";
         var unten = [p.postcode, p.city || p.county, p.state].filter(Boolean).join(" · ");
-        var g = mitGebiet ? LVK.gebiet(p.postcode) : null;
+        var g = mitGebiet ? LVK.gebiet(p) : null;
         var marke = g
           ? '<span class="vorschlag-gebiet" data-status="' + g.status + '">' +
-            (g.status === "kern" ? "Kerngebiet" : g.status === "pruefen" ? "Randgebiet" : "außerhalb") + "</span>"
+            LVK.gebietMarke(g.status) + "</span>"
           : "";
         return '<button type="button" class="vorschlag" role="option" aria-selected="false" ' +
           'id="' + liste.id + "-" + i + '" data-i="' + i + '">' +
@@ -321,7 +321,7 @@
       fenster = "Grenzwertig, aber kein durchgehendes Glättefenster in Sicht.";
     } else if (minT > 5) {
       fenster = 'Sommerlage. Zwischen Mai und Oktober sind unsere Maschinen am ' +
-        '<a class="ton-eis" href="maeharbeiten.html">Straßenbegleitgrün</a> unterwegs.';
+        '<a class="ton-eis" href="maeharbeiten">Straßenbegleitgrün</a> unterwegs.';
     } else {
       fenster = "In den nächsten 18 Stunden ist auf Ihren Flächen nichts zu erwarten.";
     }
@@ -614,7 +614,7 @@
       void gitter.offsetWidth;
       gitter.classList.add("neu");
       var zaehler = document.getElementById("fuhrpark-zahl");
-      if (zaehler) zaehler.textContent = sichtbar + (sichtbar === 1 ? " Maschine" : " Maschinen");
+      if (zaehler) zaehler.textContent = sichtbar + (sichtbar === 1 ? " Fahrzeugklasse" : " Fahrzeugklassen");
     });
   }
 

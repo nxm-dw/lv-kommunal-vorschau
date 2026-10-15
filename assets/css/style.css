@@ -2370,3 +2370,18 @@ html:not(.js) .achse { display: none; }
 .objekt-karte-mini { text-align: left; cursor: pointer; width: 100%; }
 .flaeche-farbe { background: var(--flaechenfarbe, var(--eis)); }
 .radar-fenster { font-size: .94rem; color: #C6D8E3; margin-bottom: 1.2rem; }
+/* Gewerbe-Randgebiet (Abgrenzung 06.10.2026) */
+.gebiet-marke--gewerbe { color: #5CC8F2; }
+.gebiet-satz--gewerbe  { color: #8FD6F5; }
+.vorschlag-gebiet[data-status="gewerbe"] { color: #8FD6F5; background: rgba(0,158,224,.16); }
+
+/* Schmale Bildschirme: nichts darf seitlich überstehen */
+.hero { overflow: hidden; }
+.tabelle-rolle { display: block; max-width: 100%; overflow-x: auto; }
+@media (max-width: 420px) {
+  .bilanz-karte { padding: 1.1rem .9rem; }
+  .bilanz-tabelle { font-size: .84rem; }
+  .bilanz-tabelle th, .bilanz-tabelle td { padding: .5rem .25rem; }
+  .bilanz-tabelle td:first-child { width: 2rem; }
+}
+@media (max-width: 420px) { h1, h2 { hyphens: auto; -webkit-hyphens: auto; } }

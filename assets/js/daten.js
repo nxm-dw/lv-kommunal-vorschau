@@ -33,77 +33,114 @@ window.LVK = {};
    Streumittel. Feste bundesweite Uhrzeiten gibt es NICHT.                     */
 
 /* -------------------------------------------------------------- Servicegebiet
-   Grobe Einordnung nach PLZ. Vor dem Livegang mit dem Betrieb abstimmen. */
-LVK.gebiet = function (plz) {
-  var p = String(plz || "").replace(/\D/g, "");
-  if (p.length < 2) return null;
-  var zwei = p.slice(0, 2);
-  var drei = p.slice(0, 3);
-  if (zwei === "65") return { status: "kern", text: "liegt in unserem Kerngebiet." };
-  if (["551", "552", "553", "650", "612", "613"].indexOf(drei) > -1)
-    return { status: "kern", text: "liegt in unserem Kerngebiet." };
-  if (["55", "56", "60", "61", "63", "64", "35"].indexOf(zwei) > -1)
-    return { status: "pruefen", text: "liegt am Rand unseres Gebiets – wir prüfen die Anfahrt und melden uns dazu." };
-  return { status: "aussen", text: "liegt außerhalb unseres regulären Einsatzgebiets. Schreiben Sie uns trotzdem – bei größeren Objekten schauen wir es uns an." };
-};
+   Abgrenzung laut Betrieb (Stand 06.10.2026):
+   Kerngebiet  Idstein Kernstadt ohne Ortsteile, Taunusstein-Neuhof, -Wehen,
+               -Hahn, -Bleidenstadt, -Seitzenhahn, Bad Schwalbach
+   Gewerbe     zusätzlich Niedernhausen, Eschenhahn, Hünstetten, Wiesbaden,
+               Bad Camberg sowie die übrigen Ortsteile von Taunusstein
+   Der Geocoder (Photon) liefert bei Taunusstein und Idstein den Ortsteil im
+   Feld "city" (zum Beispiel "Wehen", "Wörsdorf"). Die Postleitzahl allein
+   reicht nicht: ganz Taunusstein hat 65232, Hünstetten teilt sich 65510 mit
+   Idstein. Übergeben wird deshalb das komplette properties-Objekt; ein
+   reiner PLZ-String funktioniert weiter, liefert dann aber nur grobe Werte. */
+(function () {
+  var norm = function (s) {
+    return String(s || "").toLowerCase().replace(/ä/g, "ae").replace(/ö/g, "oe")
+      .replace(/ü/g, "ue").replace(/ß/g, "ss").replace(/[^a-z]+/g, " ").trim();
+  };
+  var TAUNUSSTEIN_KERN = ["neuhof", "wehen", "hahn", "bleidenstadt", "seitzenhahn"];
+  var IDSTEIN_ORTSTEILE = ["dasbach", "ehrenbach", "heftrich", "kroeftel", "lenzhahn",
+    "nieder oberrod", "oberauroff", "walsdorf", "woersdorf"];
+  var TEXT = {
+    kern: "liegt in unserem Kerngebiet. Dort räumen wir Gehwege, Höfe und Gewerbeflächen.",
+    gewerbe: "liegt in unserem Randgebiet. Dort fahren wir für Gewerbekunden.",
+    pruefen: "liegt außerhalb unseres Kerngebiets. Wir prüfen die Anfahrt und melden uns dazu.",
+    aussen: "liegt außerhalb unseres regulären Einsatzgebiets. Schreiben Sie uns trotzdem – bei größeren Objekten schauen wir es uns an."
+  };
+  var MARKE = { kern: "Kerngebiet", gewerbe: "Gewerbegebiet", pruefen: "auf Anfrage", aussen: "außerhalb" };
+  var erg = function (status) { return { status: status, text: TEXT[status], marke: MARKE[status] }; };
+
+  LVK.gebietMarke = function (status) { return MARKE[status] || ""; };
+
+  LVK.gebiet = function (eingabe) {
+    var p = typeof eingabe === "object" && eingabe ? eingabe : { postcode: eingabe };
+    var plz = String(p.postcode || "").replace(/\D/g, "");
+    if (!plz && /^\d{5}$/.test(p.name || "")) plz = p.name;
+    var ort = norm(p.city), teil = norm(p.district || p.locality), name = norm(p.name);
+    var orte = [ort, teil, name];
+    var hat = function (liste) { return orte.some(function (o) { return liste.indexOf(o) > -1; }); };
+    if (plz.length < 2 && !ort) return null;
+
+    /* Taunusstein */
+    if (plz === "65232") return erg(hat(TAUNUSSTEIN_KERN) ? "kern" : "gewerbe");
+    /* Bad Schwalbach mit Ortsteilen */
+    if (plz === "65307" || ort === "bad schwalbach") return erg("kern");
+    /* Idstein und Hünstetten teilen sich 65510 */
+    if (plz === "65510" || ort === "idstein" || ort === "huenstetten") {
+      if (hat(["eschenhahn"])) return erg("gewerbe");
+      if (hat(IDSTEIN_ORTSTEILE)) return erg("pruefen");
+      if (ort === "idstein") return erg("kern");
+      return erg("gewerbe");                       /* Hünstetten und seine Ortsteile */
+    }
+    if (hat(["eschenhahn"])) return erg("gewerbe");
+    /* Niedernhausen, Bad Camberg, Wiesbaden */
+    if (plz === "65527" || plz === "65520" || ort === "niedernhausen" || ort === "bad camberg" || ort === "wiesbaden") return erg("gewerbe");
+    var drei = plz.slice(0, 3), zwei = plz.slice(0, 2);
+    if (["651", "652"].indexOf(drei) > -1) return erg("gewerbe");   /* Wiesbaden 65183–65207 */
+    /* übriges Rhein-Main-Gebiet: Straßen und Autobahnen, Objekte auf Anfrage */
+    if (["55", "60", "61", "63", "64", "65", "35"].indexOf(zwei) > -1) return erg("pruefen");
+    return erg("aussen");
+  };
+})();
 
 /* ------------------------------------------------------------- Winternacht
-   Ein realistischer Verlauf einer Reifglätte-Nacht im Taunus.
-   Die Zeitachse läuft von 21:00 bis 07:00, gerechnet wird in Minuten ab 21:00.
-   Entscheidend ist der Schnittpunkt: Sobald der Taupunkt ÜBER die
-   Bodentemperatur steigt, schlägt sich die Luftfeuchte als Reif nieder.
-   Genau das passiert in dieser Nacht um 02:47.                              */
+   Zwei Simulationen, umschaltbar: ein Glätteeinsatz in einer Reifglätte-Nacht
+   und ein Räumeinsatz bei Schneefall. Zahlen der Einsatzbilanz laut Betrieb
+   (Stand 06.10.2026), Summen nachgerechnet:
+     Glätteeinsatz  8 x 320.000 + 2 x 50.000 + 5 x 5.600       = 2.688.000 m²
+     Räumeinsatz    14 Straßenräumer 2.560.000 + 4 x 25.000
+                    + 8 x 3.500 + 3 x 3.000                     = 2.697.000 m²
+   Die Zeitachse läuft von 21:00 bis 07:00, gerechnet in Minuten ab 21:00.
+   Die Zwischenstände der Fläche sind Simulationswerte, das Ende entspricht der
+   Bilanz. Bei Reifglätte ist der Schnittpunkt entscheidend: Steigt der
+   Taupunkt über die Bodentemperatur, schlägt sich Luftfeuchte als Reif nieder.
+   Die Schritte stehen zusätzlich als Markup in winterdienst.html, Abschnitt
+   #nacht, mit data-szenario. Wer hier Texte ändert, ändert sie dort auch.     */
 LVK.winternacht = {
-  von: 0, bis: 600,                      // Minuten ab 21:00 Uhr
-  stunden: [0, 60, 120, 180, 240, 300, 360, 420, 480, 540, 600],
-  luft:      [ 3.4,  2.8,  2.1,  1.5,  0.9,  0.3, -0.4, -1.0, -1.4, -1.2, -0.7],
-  boden:     [ 2.6,  1.9,  1.2,  0.5, -0.1, -0.6, -1.3, -1.9, -2.2, -1.9, -1.3],
-  taupunkt:  [ 0.4,  0.3,  0.1, -0.1, -0.4, -0.7, -0.9, -1.2, -1.5, -1.5, -1.2],
-
-  schritte: [
-    {
-      min: 40, zeit: "21:40", titel: "Die Prognose kippt",
-      text: "Der Winterdienst-Wetterdienst meldet für den Taunus Bodentemperaturen unter null ab etwa drei Uhr. Die Disposition setzt die Nachtschicht auf Bereitschaft und friert die Tourenplanung ein.",
-      marke: "Prognose", stufe: "ruhig",
-      zustand: "trocken", fahrzeuge: 0, flaeche: 0
-    },
-    {
-      min: 250, zeit: "01:10", titel: "Kontrollfahrt",
-      text: "Ein Fahrzeug fährt die kritischen Punkte ab: Brücken, Nordhänge, die Rampe am Logistikzentrum. Dort wird es immer zuerst glatt – und dort entscheidet sich, ob die ganze Schicht rausfährt.",
-      marke: null, stufe: "ruhig",
-      zustand: "abkühlend", fahrzeuge: 1, flaeche: 0
-    },
-    {
-      min: 347, zeit: "02:47", titel: "Glättewarnung",
-      text: "Der Taupunkt steigt über die Bodentemperatur. Ab hier schlägt sich die Luftfeuchte als Reif nieder – ohne einen Tropfen Niederschlag. Die Alarmierung geht an alle Touren.",
-      marke: "Auslöser", stufe: "alarm",
-      zustand: "Reifglätte", fahrzeuge: 1, flaeche: 0
-    },
-    {
-      min: 360, zeit: "03:00", titel: "Die Höfe fahren an",
-      text: "In Taunusstein werden Streuer beladen, Solebehälter gefüllt und Pflüge aufgesattelt. Jede Tour kennt ihre Reihenfolge – die steht seit dem Herbst fest.",
-      marke: null, stufe: "einsatz",
-      zustand: "Reifglätte", fahrzeuge: 9, flaeche: 0
-    },
-    {
-      min: 384, zeit: "03:24", titel: "Erste Fläche",
-      text: "Räumbeginn. Erst der Schnee runter, dann streuen – umgekehrt friert die Schicht sofort wieder fest. Der Schnee wird dorthin abgelegt, wo er niemanden stört.",
-      marke: null, stufe: "einsatz",
-      zustand: "Reifglätte", fahrzeuge: 9, flaeche: 1200
-    },
-    {
-      min: 470, zeit: "04:50", titel: "Nachstreuen",
-      text: "Wo am Morgen Publikumsverkehr kommt, geht ein zweites Mal Streugut raus. Der Bordcomputer hält Menge und Position fest, die GPS-Spur läuft mit.",
-      marke: null, stufe: "einsatz",
-      zustand: "Reifglätte", fahrzeuge: 9, flaeche: 18400
-    },
-    {
-      min: 570, zeit: "06:30", titel: "Sie schließen auf",
-      text: "Parkplatz frei, Gehweg abgestumpft, Zufahrt befahrbar. Das Protokoll der Nacht liegt im System – abrufbar, falls jemand danach fragt.",
-      marke: "Nachweis", stufe: "fertig",
-      zustand: "gesichert", fahrzeuge: 3, flaeche: 26800
-    }
-  ]
+  reif: {
+    name: "Glätteeinsatz", flaecheWort: "Gestreut", einheitWort: "Fahrzeuge",
+    von: 0, bis: 600,
+    stunden: [0, 60, 120, 180, 240, 300, 360, 420, 480, 540, 600],
+    luft:      [ 3.4,  2.8,  2.1,  1.5,  0.9,  0.3, -0.4, -1.0, -1.4, -1.2, -0.7],
+    boden:     [ 2.6,  1.9,  1.2,  0.5, -0.1, -0.6, -1.3, -1.9, -2.2, -1.9, -1.3],
+    taupunkt:  [ 0.4,  0.3,  0.1, -0.1, -0.4, -0.7, -0.9, -1.2, -1.5, -1.5, -1.2],
+    schritte: [
+      { min: 40,  zeit: "21:40", titel: "Die Prognose kippt", marke: "Prognose", stufe: "ruhig", zustand: "trocken", fahrzeuge: 0, flaeche: 0 },
+      { min: 250, zeit: "01:10", titel: "Kontrollfahrt", marke: null, stufe: "ruhig", zustand: "abkühlend", fahrzeuge: 1, flaeche: 0 },
+      { min: 347, zeit: "02:47", titel: "Glättewarnung", marke: "Auslöser", stufe: "alarm", zustand: "Reifglätte", fahrzeuge: 1, flaeche: 0 },
+      { min: 360, zeit: "03:00", titel: "Die Höfe fahren an", marke: null, stufe: "einsatz", zustand: "Reifglätte", fahrzeuge: 15, flaeche: 0 },
+      { min: 384, zeit: "03:24", titel: "Die Touren laufen", marke: null, stufe: "einsatz", zustand: "Reifglätte", fahrzeuge: 15, flaeche: 240000 },
+      { min: 470, zeit: "04:50", titel: "Nachstreuen", marke: null, stufe: "einsatz", zustand: "Reifglätte", fahrzeuge: 15, flaeche: 1820000 },
+      { min: 570, zeit: "06:30", titel: "Sie schließen auf", marke: "Nachweis", stufe: "fertig", zustand: "gesichert", fahrzeuge: 15, flaeche: 2688000 }
+    ]
+  },
+  schnee: {
+    name: "Räumeinsatz", flaecheWort: "Geräumt", einheitWort: "Einheiten",
+    von: 0, bis: 600,
+    stunden: [0, 60, 120, 180, 240, 300, 360, 420, 480, 540, 600],
+    luft:      [ 0.8,  0.4,  0.0, -0.4, -0.9, -1.3, -1.6, -1.9, -2.1, -1.9, -1.6],
+    boden:     [ 1.2,  0.8,  0.4,  0.0, -0.4, -0.8, -1.1, -1.4, -1.6, -1.5, -1.3],
+    taupunkt:  [-0.6, -0.8, -1.1, -1.4, -1.8, -2.2, -2.5, -2.8, -3.0, -2.9, -2.7],
+    schritte: [
+      { min: 30,  zeit: "21:30", titel: "Schnee ist angesagt", marke: "Prognose", stufe: "ruhig", zustand: "trocken", fahrzeuge: 0, flaeche: 0 },
+      { min: 170, zeit: "23:50", titel: "Erste Flocken", marke: null, stufe: "ruhig", zustand: "Schneefall", fahrzeuge: 1, flaeche: 0 },
+      { min: 255, zeit: "01:15", titel: "Räumalarm", marke: "Auslöser", stufe: "alarm", zustand: "Schneefall", fahrzeuge: 1, flaeche: 0 },
+      { min: 285, zeit: "01:45", titel: "Alle rücken aus", marke: null, stufe: "einsatz", zustand: "Schneeglätte", fahrzeuge: 29, flaeche: 0 },
+      { min: 330, zeit: "02:30", titel: "Erst räumen, dann streuen", marke: null, stufe: "einsatz", zustand: "Schneeglätte", fahrzeuge: 29, flaeche: 620000 },
+      { min: 460, zeit: "04:40", titel: "Zweiter Durchgang", marke: null, stufe: "einsatz", zustand: "Schneeglätte", fahrzeuge: 29, flaeche: 1940000 },
+      { min: 570, zeit: "06:30", titel: "Bereit für den Morgen", marke: "Nachweis", stufe: "fertig", zustand: "geräumt", fahrzeuge: 29, flaeche: 2697000 }
+    ]
+  }
 };
 
 /* ------------------------------------------------------------------- Icons
@@ -204,7 +241,8 @@ LVK.funnel = {
 /* ------------------------------------------------------------- Preisspanne
    Optional. Solange aktiv:false steht, zeigt der Objekt-Check keine Preise.
    Sobald LV die Kalkulation freigibt: Werte eintragen und aktiv auf true setzen.
-   proQm sind Saisonpreise je Quadratmeter in Euro, von/bis als Spanne.        */
+   proQm sind Saisonpreise je Quadratmeter in Euro, von/bis als Spanne.
+   Gehwege werden in Laufmetern erfasst und über proLm abgerechnet.            */
 LVK.preise = {
   aktiv: false,
   hinweis: "Unverbindliche Spanne für eine komplette Saison, netto. " +
@@ -212,10 +250,12 @@ LVK.preise = {
   grundgebuehr: { von: 0, bis: 0 },
   proQm: {
     "Parkplatz":        { von: 0, bis: 0 },
-    "Gehweg":           { von: 0, bis: 0 },
     "Zufahrt":          { von: 0, bis: 0 },
     "Hof / Ladezone":   { von: 0, bis: 0 },
     "Sonstige Fläche":  { von: 0, bis: 0 }
+  },
+  proLm: {
+    "Gehweg":           { von: 0, bis: 0 }
   }
 };
 
@@ -224,6 +264,11 @@ LVK.spanne = function (objekte) {
   var von = LVK.preise.grundgebuehr.von, bis = LVK.preise.grundgebuehr.bis;
   objekte.forEach(function (o) {
     o.flaechen.forEach(function (f) {
+      if (f.lm) {
+        var l = LVK.preise.proLm[f.art] || { von: 0, bis: 0 };
+        von += f.lm * l.von; bis += f.lm * l.bis;
+        return;
+      }
       var s = LVK.preise.proQm[f.art] || LVK.preise.proQm["Sonstige Fläche"];
       von += f.qm * s.von;
       bis += f.qm * s.bis;
@@ -241,20 +286,32 @@ LVK.stadtseitenAn = false;
    Echte Koordinaten. Die Karte wird daraus gerechnet, nicht gezeichnet –
    dadurch stimmen die Lagen zueinander und neue Orte fügen sich richtig ein. */
 LVK.gebietOrte = [
-  { name: "Idstein",        lat: 50.2189, lon: 8.2704, typ: "ort",     seite: "winterdienst-idstein.html" },
-  { name: "Taunusstein",    lat: 50.1367, lon: 8.1490, typ: "betrieb", seite: "winterdienst-taunusstein.html" },
-  { name: "Limburg",        lat: 50.3833, lon: 8.0667, typ: "ort",     seite: "winterdienst-limburg.html" },
+  { name: "Taunusstein",    lat: 50.1430, lon: 8.1530, typ: "betrieb", seite: "winterdienst-taunusstein" },
+  { name: "Idstein",        lat: 50.2189, lon: 8.2704, typ: "ort",     seite: "winterdienst-idstein" },
   { name: "Bad Schwalbach", lat: 50.1408, lon: 8.0703, typ: "ort" },
-  { name: "Wiesbaden",      lat: 50.0826, lon: 8.2400, typ: "ort",     seite: "winterdienst-wiesbaden.html" },
-  { name: "Hofheim",        lat: 50.0866, lon: 8.4470, typ: "ort" },
-  { name: "Eltville",       lat: 50.0281, lon: 8.1180, typ: "ort" },
-  { name: "Mainz",          lat: 49.9929, lon: 8.2473, typ: "ort",     seite: "winterdienst-mainz.html" }
+  { name: "Bad Camberg",    lat: 50.2985, lon: 8.2669, typ: "ort" },
+  { name: "Wiesbaden",      lat: 50.0826, lon: 8.2400, typ: "ort",     seite: "winterdienst-wiesbaden" },
+  { name: "Limburg",        lat: 50.3833, lon: 8.0667, typ: "ort",     seite: "winterdienst-limburg" },
+  { name: "Mainz",          lat: 49.9929, lon: 8.2473, typ: "ort",     seite: "winterdienst-mainz" },
+  { name: "Frankfurt",      lat: 50.1109, lon: 8.6821, typ: "ort" },
+  { name: "Offenbach",      lat: 50.0956, lon: 8.7761, typ: "ort" }
 ];
 
-/* Nur zur Orientierung, gehört nicht zum Kerngebiet */
-LVK.gebietMarken = [
-  { name: "Frankfurt", lat: 50.1109, lon: 8.6821 }
+/* Drei Leistungsbereiche laut Betrieb (Stand 06.10.2026). Die Karte zeichnet je
+   Bereich eine weiche Hülle um die Eckpunkte, der größte Bereich zuerst.       */
+LVK.gebietZonen = [
+  { name: "Straßen und Autobahn", klasse: "strasse", dehnung: 22, orte: [
+    [50.3833, 8.0667], [50.4836, 8.2622], [50.2268, 8.6182], [50.0956, 8.7761], [50.1109, 8.6821],
+    [49.9214, 8.4818], [49.9929, 8.2473], [50.0281, 8.0500], [50.1408, 8.0703] ] },
+  { name: "Gewerbe", klasse: "gewerbe", dehnung: 18, orte: [
+    [50.1430, 8.1530], [50.0826, 8.2400], [50.2550, 8.2000], [50.1408, 8.0703], [50.2985, 8.2669] ] },
+  { name: "Gehwege", klasse: "gehwege", dehnung: 14, orte: [
+    [50.1740, 8.1580], [50.1490, 8.1760], [50.1367, 8.1490], [50.1570, 8.1170], [50.1330, 8.1110],
+    [50.1408, 8.0703], [50.2189, 8.2704] ] }
 ];
+
+/* Nur zur Orientierung */
+LVK.gebietMarken = [];
 
 /* Grob nachgezeichneter Rheinlauf – hilft beim Einordnen der Karte */
 LVK.rheinlauf = [

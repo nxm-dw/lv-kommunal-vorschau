@@ -17,7 +17,11 @@
     if (!B) return;
     var H = Math.round(Math.min(640, Math.max(380, B * 0.82)));
 
-    var alle = LVK.gebietOrte.concat(LVK.gebietMarken);
+    var zonen = LVK.gebietZonen || [];
+    var zonenPunkte = zonen.reduce(function (a, z) {
+      return a.concat(z.orte.map(function (o) { return { lat: o[0], lon: o[1] }; }));
+    }, []);
+    var alle = LVK.gebietOrte.concat(LVK.gebietMarken, zonenPunkte);
     var lat0 = alle.reduce(function (a, o) { return a + o.lat; }, 0) / alle.length;
     var k = Math.cos(lat0 * Math.PI / 180);
 
@@ -41,9 +45,9 @@
       return { x: vX + (r.x - minX) * mass, y: vY + (r.y - minY) * mass };
     };
 
-    /* Konvexe Hülle der betreuten Orte (Andrew) */
-    var pts = LVK.gebietOrte.map(function (o) { return P(o.lat, o.lon); })
-      .slice().sort(function (a, b) { return a.x - b.x || a.y - b.y; });
+    /* Konvexe Hülle (Andrew), nach außen gedehnt */
+    function huelleUm(roh, dehnung) {
+    var pts = roh.slice().sort(function (a, b) { return a.x - b.x || a.y - b.y; });
     var kreuz = function (o, a, b) { return (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x); };
     var unten = [], oben = [];
     pts.forEach(function (p) {
@@ -60,11 +64,13 @@
     var mx = huelle.reduce(function (a, p) { return a + p.x; }, 0) / huelle.length;
     var my = huelle.reduce(function (a, p) { return a + p.y; }, 0) / huelle.length;
     void my;
-    var weit = huelle.map(function (p) {
+    return huelle.map(function (p) {
       var dx = p.x - mx, dy = p.y - my, l = Math.hypot(dx, dy) || 1;
-      var d = 34;
-      return { x: p.x + dx / l * d, y: p.y + dy / l * d };
+      return { x: p.x + dx / l * dehnung, y: p.y + dy / l * dehnung };
     });
+    }
+    /* Mittelpunkt der Orte, nach ihm richten sich die Beschriftungen */
+    var mx = LVK.gebietOrte.reduce(function (a, o) { return a + P(o.lat, o.lon).x; }, 0) / LVK.gebietOrte.length;
 
     /* Weiche geschlossene Kurve durch die gedehnten Punkte */
     function weich(ps) {
@@ -104,9 +110,18 @@
     var rMitte = P(LVK.rheinlauf[2][0], LVK.rheinlauf[2][1]);
     svg.push('<text x="' + (rMitte.x - 6) + '" y="' + (rMitte.y + 20) + '" fill="#5CC8F2" fill-opacity=".5" font-size="11" font-family="Chivo Mono, monospace" letter-spacing="1.6">RHEIN</text>');
 
-    /* Einsatzgebiet */
-    svg.push('<path class="gebiet-flaeche" d="' + weich(weit) + '" fill="url(#gebiet-fuell)" ' +
-      'stroke="#5CC8F2" stroke-opacity=".55" stroke-width="1.5" stroke-dasharray="7 6" filter="url(#gebiet-schein)"/>');
+    /* Einsatzgebiet: drei Bereiche, der größte zuerst */
+    var STIL = {
+      strasse: { fill: "#009EE0", fo: ".07", st: "#5CC8F2", so: ".35", dash: "3 6" },
+      gewerbe: { fill: "#009EE0", fo: ".14", st: "#5CC8F2", so: ".6", dash: "7 6" },
+      gehwege: { fill: "#5CC8F2", fo: ".28", st: "#BFE9FA", so: ".9", dash: "" }
+    };
+    zonen.forEach(function (z) {
+      var st = STIL[z.klasse] || STIL.gewerbe;
+      var h = huelleUm(z.orte.map(function (o) { return P(o[0], o[1]); }), z.dehnung);
+      svg.push('<path class="gebiet-flaeche gebiet-zone--' + z.klasse + '" d="' + weich(h) + '" fill="' + st.fill + '" fill-opacity="' + st.fo + '" ' +
+        'stroke="' + st.st + '" stroke-opacity="' + st.so + '" stroke-width="1.5"' + (st.dash ? ' stroke-dasharray="' + st.dash + '"' : "") + '/>');
+    });
 
     /* Verbindungen von den Betriebsstätten zu den Orten */
     var betriebe = LVK.gebietOrte.filter(function (o) { return o.typ === "betrieb"; });
@@ -135,7 +150,8 @@
     var plaetze = LVK.gebietOrte.map(function (o) {
       var q = P(o.lat, o.lon);
       var betrieb = o.typ === "betrieb";
-      var rechts = q.x >= mx;
+      /* Die Betriebsstätte steht immer rechts, links liegt Bad Schwalbach zu nah */
+      var rechts = betrieb || q.x >= mx;
       var breite = o.name.length * (betrieb ? 8.2 : 7.4) + 22;
       var ty = q.y + (betrieb ? 5 : 4);
 

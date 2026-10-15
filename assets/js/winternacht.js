@@ -10,7 +10,9 @@
   var sek = document.getElementById("nacht");
   if (!sek || !window.LVK || !LVK.winternacht) return;
 
-  var D = LVK.winternacht;
+  /* Zwei Szenarien: Glätteeinsatz (reif) und Räumeinsatz (schnee) */
+  var szenario = "reif";
+  var D = LVK.winternacht[szenario];
   var sparsam = matchMedia("(prefers-reduced-motion: reduce)").matches;
   var $ = function (id) { return document.getElementById(id); };
   var svgNS = "http://www.w3.org/2000/svg";
@@ -18,7 +20,16 @@
 
   var wert = D.von;
   var aktiverSchritt = -1;
-  var schrittBoxen = [].slice.call(document.querySelectorAll(".leitstand-schritt"));
+  var alleSchritte = [].slice.call(document.querySelectorAll(".leitstand-schritt"));
+  var alleMarken = [].slice.call(document.querySelectorAll(".achse-marke"));
+  var schrittBoxen = [], marken = [];
+  function szenarioTeile() {
+    schrittBoxen = alleSchritte.filter(function (b) { return b.getAttribute("data-szenario") === szenario; });
+    marken = alleMarken.filter(function (b) { return b.getAttribute("data-szenario") === szenario; });
+    alleSchritte.forEach(function (b) { if (schrittBoxen.indexOf(b) < 0) b.hidden = true; });
+    alleMarken.forEach(function (b) { b.hidden = marken.indexOf(b) < 0; });
+  }
+  szenarioTeile();
   var teile = null;
   var laeuft = false;
 
@@ -27,7 +38,7 @@
      weich, überschwingt aber nie über die Messwerte hinaus – wichtig, weil
      sonst ein Schnittpunkt entstünde, den die Daten gar nicht hergeben.      */
   var steigung = {};
-  (function () {
+  function berechneSteigung() {
     var x = D.stunden;
     ["luft", "boden", "taupunkt"].forEach(function (name) {
       var y = D[name], n = y.length;
@@ -46,7 +57,8 @@
       }
       steigung[name] = m;
     });
-  })();
+  }
+  berechneSteigung();
 
   function zwischen(reihe, min) {
     var x = D.stunden;
@@ -256,7 +268,7 @@
      ihren Klick. Die Position als CSS-Variable statt als style-Attribut,
      damit eine strenge Content-Security-Policy möglich bleibt. */
   function baueMarken() {
-    $("achse-marken").querySelectorAll("[data-i]").forEach(function (b) {
+    alleMarken.forEach(function (b) {
       b.style.setProperty("--links", b.getAttribute("data-links") + "%");
       b.addEventListener("click", function () {
         springeZu(D.schritte[Number(b.getAttribute("data-i"))].min);
@@ -280,8 +292,10 @@
     var s = D.schritte[idx];
 
     $("uhr-zahl").textContent = alsUhr(min);
+    $("wert-fahrzeuge-name").textContent = D.einheitWort;
+    $("wert-flaeche-name").textContent = D.flaecheWort;
     $("wert-fahrzeuge").innerHTML = s.fahrzeuge + "<small>im Einsatz</small>";
-    $("wert-flaeche").innerHTML = nk(s.flaeche) + "<small>Quadratmeter</small>";
+    $("wert-flaeche").innerHTML = (s.flaeche >= 1e6 ? nk(s.flaeche / 1e6, 2) + " Mio." : nk(s.flaeche)) + "<small>Quadratmeter</small>";
     $("wert-zustand").textContent = s.zustand;
 
     if (idx !== aktiverSchritt) {
@@ -302,7 +316,7 @@
     var p = min / D.bis;
     $("achse-fortschritt").style.width = (p * 100) + "%";
     $("nacht-schieber").value = Math.round(min);
-    $("achse-marken").querySelectorAll(".achse-marke").forEach(function (b, i) {
+    marken.forEach(function (b, i) {
       b.setAttribute("data-erreicht", String(D.schritte[i].min <= min + 0.5));
       b.setAttribute("data-aktiv", String(i === aktiverSchritt));
     });
@@ -340,6 +354,22 @@
       zeichne(ausScroll());
     });
   }
+
+  /* Umschalter Glätteeinsatz / Räumeinsatz */
+  [].slice.call(document.querySelectorAll(".szenario-knopf")).forEach(function (k, _, alle) {
+    k.addEventListener("click", function () {
+      var neu = k.getAttribute("data-szenario");
+      if (neu === szenario || !LVK.winternacht[neu]) return;
+      szenario = neu;
+      D = LVK.winternacht[szenario];
+      alle.forEach(function (x) { x.setAttribute("aria-pressed", String(x === k)); });
+      berechneSteigung();
+      szenarioTeile();
+      aktiverSchritt = -1;
+      baueKurve();
+      zeichne(ausScroll());
+    });
+  });
 
   baueKurve();
   baueMarken();
