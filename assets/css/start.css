@@ -497,3 +497,7 @@ html:not(.js) .achse { display: none; }
   .bilanz-tabelle td:first-child { width: 2rem; }
 }
 @media (max-width: 420px) { h1, h2 { hyphens: auto; -webkit-hyphens: auto; } }
+
+/* Mäharbeiten: echter Einstieg statt „In Entwicklung", in Grün */
+.feld-cta--gruen { background: #2F5A27; box-shadow: none; }
+.feld--maeh:hover .feld-cta--gruen, .feld--maeh:focus-visible .feld-cta--gruen { background: #3C7032; box-shadow: 0 10px 32px rgba(76, 140, 63, .45); }
