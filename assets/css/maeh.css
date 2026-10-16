@@ -507,3 +507,8 @@
   .finder-tab { padding: .75rem .65rem; }
   .finder-tab-text strong { font-size: .86rem; hyphens: auto; -webkit-hyphens: auto; }
 }
+
+/* Hero: Luft zwischen Brotkrumen und Saison-Chip */
+.hero nav:has(> .brotkrumen) { margin-bottom: clamp(1.6rem, 3.5vh, 2.4rem); }
+.hero nav > .brotkrumen { margin-bottom: 0; }
+.hero-saison { margin-bottom: 1.4rem; }
