@@ -566,7 +566,7 @@
     belegAuswahl.addEventListener("click", function (e) {
       var k = e.target.closest("[data-beleg]");
       if (!k) return;
-      belegAuswahl.querySelectorAll(".chip").forEach(function (c) { c.classList.toggle("aktiv", c === k); });
+      belegAuswahl.querySelectorAll("[data-beleg]").forEach(function (c) { c.setAttribute("aria-pressed", String(c === k)); });
       zeigeBeleg(k.getAttribute("data-beleg"));
     });
   }
@@ -796,4 +796,9 @@
     });
   }
 
+
+  /* Einsatzbilanz: Anteile der Fahrzeuggruppen an der Fläche */
+  document.querySelectorAll(".bilanz-segment[data-anteil]").forEach(function (seg) {
+    seg.style.setProperty("--anteil", seg.getAttribute("data-anteil"));
+  });
 })();

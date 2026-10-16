@@ -363,6 +363,7 @@
       szenario = neu;
       D = LVK.winternacht[szenario];
       alle.forEach(function (x) { x.setAttribute("aria-pressed", String(x === k)); });
+      var wahl = k.closest(".szenario-wahl"); if (wahl) wahl.classList.add("benutzt");
       berechneSteigung();
       szenarioTeile();
       aktiverSchritt = -1;

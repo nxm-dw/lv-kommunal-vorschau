@@ -2,6 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
+<meta name="format-detection" content="telephone=no">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Winterdienst Taunus &amp; Rhein-Main | LV Kommunal Winterdienst GmbH</title>
 <meta name="description" content="Winterdienst für Gewerbe, Hausverwaltungen und Kommunen im Taunus und Rhein-Main. Einsatzstart 3 Uhr, grammgenaue Streutechnik, GPS-Nachweis. Objekt in zwei Minuten online prüfen.">
@@ -669,12 +670,22 @@
 
       <div class="leitstand-zeile">
         <p class="eyebrow ohne-abstand">Eine Nacht im&nbsp;Januar</p>
-        <div class="szenario-wahl" role="group" aria-label="Einsatz wählen">
-          <button type="button" class="szenario-knopf" data-szenario="reif" aria-pressed="true">Glätteeinsatz <small>Reifglätte, 15&nbsp;Fahrzeuge</small></button>
-          <button type="button" class="szenario-knopf" data-szenario="schnee" aria-pressed="false">Räumeinsatz <small>Schneefall, 29&nbsp;Einheiten</small></button>
-        </div>
         <p class="leitstand-scrollhinweis" id="leitstand-scrollhinweis">Scrollen bewegt die&nbsp;Uhr</p>
       </div>
+        <div class="szenario-wahl" role="group" aria-label="Einsatz wählen">
+          <span class="szenario-label" aria-hidden="true">Einsatz wählen</span>
+          <button type="button" class="szenario-knopf" data-szenario="reif" aria-pressed="true">
+            <span class="szenario-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M4.9 6.5l14.2 11M4.9 17.5l14.2-11M9.5 3.5 12 6l2.5-2.5M9.5 20.5 12 18l2.5 2.5M3 9.7l3.3.9-.9 3.3M21 14.3l-3.3-.9.9-3.3"/></svg></span>
+            <span class="szenario-text"><strong>Glätteeinsatz</strong><small>Reifglätte · 15 Fahrzeuge · 2,69 Mio. m²</small></span>
+            <span class="szenario-status" aria-hidden="true"></span>
+          </button>
+          <button type="button" class="szenario-knopf" data-szenario="schnee" aria-pressed="false">
+            <span class="szenario-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15.5a4.5 4.5 0 1 1 .9-8.9A5.5 5.5 0 0 1 18.5 8a3.75 3.75 0 0 1-.5 7.5H7Z"/><path d="M8 19h.01M12 20.5h.01M16 19h.01M10 22h.01M14 22h.01"/></svg></span>
+            <span class="szenario-text"><strong>Räumeinsatz</strong><small>Schneefall · 29 Einheiten · 2,70 Mio. m²</small></span>
+            <span class="szenario-status" aria-hidden="true"></span>
+          </button>
+        </div>
+
 
       <div class="leitstand-kopf">
         <div id="leitstand-inhalt">
@@ -804,37 +815,31 @@
     <div class="sek-kopf auf">
       <p class="eyebrow grau">Einsatzbilanz</p>
       <h2 class="d-l" id="bilanz-titel">So viel schafft eine&nbsp;Nacht</h2>
-      <p class="lead abstand-o">So rechnen wir die beiden Einsätze der Winternacht. Ein Streufahrzeug fährt eine Tour von rund 80 Kilometern mit vier Metern Streubreite, das allein sind&nbsp;320.000&nbsp;Quadratmeter.</p>
+      <p class="lead abstand-o">So rechnen wir die beiden Einsätze der Winternacht. Ein Streufahrzeug fährt eine Tour von rund 80&nbsp;Kilometern mit vier Metern Streubreite. Das allein sind 320.000&nbsp;Quadratmeter.</p>
     </div>
     <div class="bilanz-gitter auf v2">
-      <article class="bilanz-karte">
-        <p class="bilanz-art">Glätteeinsatz bei&nbsp;Reifglätte</p>
-        <p class="bilanz-gesamt"><span class="zahl">2.688.000</span> Quadratmeter <small>mit&nbsp;15&nbsp;Fahrzeugen</small></p>
-        <table class="bilanz-tabelle">
-          <caption class="sr">Glätteeinsatz: Fahrzeuge und gestreute Fläche</caption>
-          <thead><tr><th scope="col">Anzahl</th><th scope="col">Einheit</th><th scope="col">je&nbsp;Einheit</th><th scope="col">gesamt</th></tr></thead>
-          <tbody>
-            <tr><td class="zahl">8</td><th scope="row">Streufahrzeuge <small>80 km × 4&nbsp;m</small></th><td class="zahl">320.000&nbsp;m²</td><td class="zahl">2.560.000&nbsp;m²</td></tr>
-            <tr><td class="zahl">2</td><th scope="row">Gewerbefahrzeuge</th><td class="zahl">50.000&nbsp;m²</td><td class="zahl">100.000&nbsp;m²</td></tr>
-            <tr><td class="zahl">5</td><th scope="row">Kleinfahrzeuge</th><td class="zahl">5.600&nbsp;m²</td><td class="zahl">28.000&nbsp;m²</td></tr>
-          </tbody>
-          <tfoot><tr><td class="zahl">15</td><th scope="row">Fahrzeuge&nbsp;gesamt</th><td></td><td class="zahl">2.688.000&nbsp;m²</td></tr></tfoot>
-        </table>
+      <article class="bilanz-karte bilanz-karte--reif">
+        <div class="bilanz-kopf"><span class="bilanz-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M4.2 6.5l15.6 9M4.2 17.5l15.6-9M9.5 3.5 12 6l2.5-2.5M9.5 20.5 12 18l2.5 2.5"/></svg></span><p class="bilanz-art">Glätteeinsatz<small>Reifglätte</small></p></div>
+        <p class="bilanz-gesamt"><span class="bilanz-zahl">2.688.000</span><span class="bilanz-einheit">m²</span></p>
+        <p class="bilanz-unter">Gestreut in einer Nacht mit&nbsp;15&nbsp;Fahrzeugen</p>
+        <div class="bilanz-anteile" aria-hidden="true"><span class="bilanz-segment f0" data-anteil="95.2"></span><span class="bilanz-segment f1" data-anteil="3.7"></span><span class="bilanz-segment f2" data-anteil="1.1"></span></div>
+        <ul class="bilanz-liste">
+            <li class="bilanz-zeile"><span class="bilanz-farbe f0" aria-hidden="true"></span><span class="bilanz-anzahl">8×</span><span class="bilanz-name">Streufahrzeuge<small>je 320.000&nbsp;m²</small></span><span class="bilanz-wert">2.560.000&nbsp;m²</span></li>
+            <li class="bilanz-zeile"><span class="bilanz-farbe f1" aria-hidden="true"></span><span class="bilanz-anzahl">2×</span><span class="bilanz-name">Gewerbefahrzeuge<small>je 50.000&nbsp;m²</small></span><span class="bilanz-wert">100.000&nbsp;m²</span></li>
+            <li class="bilanz-zeile"><span class="bilanz-farbe f2" aria-hidden="true"></span><span class="bilanz-anzahl">5×</span><span class="bilanz-name">Kleinfahrzeuge<small>je 5.600&nbsp;m²</small></span><span class="bilanz-wert">28.000&nbsp;m²</span></li>
+        </ul>
       </article>
-      <article class="bilanz-karte">
-        <p class="bilanz-art">Räumeinsatz bei&nbsp;Schneefall</p>
-        <p class="bilanz-gesamt"><span class="zahl">2.697.000</span> Quadratmeter <small>mit&nbsp;29&nbsp;Einheiten</small></p>
-        <table class="bilanz-tabelle">
-          <caption class="sr">Räumeinsatz: Fahrzeuge, Kolonnen und geräumte Fläche</caption>
-          <thead><tr><th scope="col">Anzahl</th><th scope="col">Einheit</th><th scope="col">je&nbsp;Einheit</th><th scope="col">gesamt</th></tr></thead>
-          <tbody>
-            <tr><td class="zahl">14</td><th scope="row">Straßenräumer</th><td class="zahl">–</td><td class="zahl">2.560.000&nbsp;m²</td></tr>
-            <tr><td class="zahl">4</td><th scope="row">Gewerbefahrzeuge</th><td class="zahl">25.000&nbsp;m²</td><td class="zahl">100.000&nbsp;m²</td></tr>
-            <tr><td class="zahl">8</td><th scope="row">Gehwegfahrzeuge</th><td class="zahl">3.500&nbsp;m²</td><td class="zahl">28.000&nbsp;m²</td></tr>
-            <tr><td class="zahl">3</td><th scope="row">Handkolonnen</th><td class="zahl">3.000&nbsp;m²</td><td class="zahl">9.000&nbsp;m²</td></tr>
-          </tbody>
-          <tfoot><tr><td class="zahl">29</td><th scope="row">Einheiten&nbsp;gesamt</th><td></td><td class="zahl">2.697.000&nbsp;m²</td></tr></tfoot>
-        </table>
+      <article class="bilanz-karte bilanz-karte--schnee">
+        <div class="bilanz-kopf"><span class="bilanz-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15a4.5 4.5 0 1 1 .9-8.9A5.5 5.5 0 0 1 18.5 8 3.5 3.5 0 0 1 18 15H7Z"/><path d="M8 19h.01M12 19h.01M16 19h.01M10 22h.01M14 22h.01"/></svg></span><p class="bilanz-art">Räumeinsatz<small>Schneefall</small></p></div>
+        <p class="bilanz-gesamt"><span class="bilanz-zahl">2.697.000</span><span class="bilanz-einheit">m²</span></p>
+        <p class="bilanz-unter">Geräumt in einer Nacht mit&nbsp;29&nbsp;Einheiten</p>
+        <div class="bilanz-anteile" aria-hidden="true"><span class="bilanz-segment f0" data-anteil="94.9"></span><span class="bilanz-segment f1" data-anteil="3.7"></span><span class="bilanz-segment f2" data-anteil="1.0"></span><span class="bilanz-segment f3" data-anteil="0.4"></span></div>
+        <ul class="bilanz-liste">
+            <li class="bilanz-zeile"><span class="bilanz-farbe f0" aria-hidden="true"></span><span class="bilanz-anzahl">14×</span><span class="bilanz-name">Straßenräumer<small>Hauptstrecken</small></span><span class="bilanz-wert">2.560.000&nbsp;m²</span></li>
+            <li class="bilanz-zeile"><span class="bilanz-farbe f1" aria-hidden="true"></span><span class="bilanz-anzahl">4×</span><span class="bilanz-name">Gewerbefahrzeuge<small>je 25.000&nbsp;m²</small></span><span class="bilanz-wert">100.000&nbsp;m²</span></li>
+            <li class="bilanz-zeile"><span class="bilanz-farbe f2" aria-hidden="true"></span><span class="bilanz-anzahl">8×</span><span class="bilanz-name">Gehwegfahrzeuge<small>je 3.500&nbsp;m²</small></span><span class="bilanz-wert">28.000&nbsp;m²</span></li>
+            <li class="bilanz-zeile"><span class="bilanz-farbe f3" aria-hidden="true"></span><span class="bilanz-anzahl">3×</span><span class="bilanz-name">Handkolonnen<small>je 3.000&nbsp;m²</small></span><span class="bilanz-wert">9.000&nbsp;m²</span></li>
+        </ul>
       </article>
     </div>
   </div>
@@ -856,10 +861,19 @@
         <p class="lead">
           So sieht ein Sammelnachweis aus. Wählen Sie&nbsp;ein&nbsp;Beispielobjekt.
         </p>
-        <div class="chips abstand-o-l" id="beleg-auswahl" role="group" aria-label="Beispielobjekt wählen">
-          <button type="button" class="chip aktiv" data-beleg="logistik">Logistikzentrum</button>
-          <button type="button" class="chip" data-beleg="wohnen">Wohnanlage, 42&nbsp;Einheiten</button>
-          <button type="button" class="chip" data-beleg="markt">Supermarkt-Filiale</button>
+        <div class="objekt-auswahl abstand-o-l" id="beleg-auswahl" role="group" aria-label="Beispielobjekt wählen">
+          <button type="button" class="objekt-wahl" data-beleg="logistik" aria-pressed="true">
+            <span class="objekt-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9l9-5 9 5v12"/><path d="M7 21v-7h10v7M7 17h10"/></svg></span>
+            <span class="objekt-text"><strong>Logistikzentrum</strong><small>8.400&nbsp;m² Hof, 12&nbsp;Rampen</small></span>
+          </button>
+          <button type="button" class="objekt-wahl" data-beleg="wohnen" aria-pressed="false">
+            <span class="objekt-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V8l6-4 6 4v13M16 11h4v10M4 21h17"/><path d="M8 11h4M8 15h4"/></svg></span>
+            <span class="objekt-text"><strong>Wohnanlage</strong><small>42&nbsp;Einheiten, 410&nbsp;m Gehweg</small></span>
+          </button>
+          <button type="button" class="objekt-wahl" data-beleg="markt" aria-pressed="false">
+            <span class="objekt-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h18l-1.5-5h-15L3 9Z"/><path d="M5 9v12h14V9M9 21v-6h6v6"/></svg></span>
+            <span class="objekt-text"><strong>Supermarkt-Filiale</strong><small>2.850&nbsp;m² Kundenparkplatz</small></span>
+          </button>
         </div>
       </div>
 
@@ -954,69 +968,65 @@
       <article class="maschine" data-tags="eng parkplatz" data-verzug="0">
         <div class="maschine-bild">
           <span class="maschine-foto" data-bild="gehweg-nacht-klein"></span>
-          <span class="maschine-klasse">Kompakt</span>
+          <span class="maschine-klasse">Gehwege</span>
         </div>
         <div class="maschine-koerper">
-          <h3>Gehwegfahrzeug</h3>
-          <p class="maschine-zweck">Schmalspurträger bis 70 PS für Gehwege, Innenhöfe und Eingänge, in die kein großes&nbsp;Fahrzeug&nbsp;kommt.</p>
+          <div class="maschine-titel"><h3>Gehwegfahrzeug</h3><p>Schmalspurträger bis 70&nbsp;PS</p></div>
+          <p class="maschine-zweck">Für Gehwege, Innenhöfe und Eingänge, in die kein großes Fahrzeug&nbsp;kommt.</p>
           <div class="breite">
-            <div class="breite-kopf"><span>Räumbreite</span><b class="zahl">1,30&nbsp;Meter</b></div>
-            <div class="breite-schiene"><span class="breite-balken" data-anteil="26.0"></span></div>
-            <div class="breite-skala"><span>0</span><span>5,00&nbsp;Meter</span></div>
+            <dl class="maschine-werte"><div><dt>Räumbreite</dt><dd class="zahl">1,30&nbsp;m</dd></div><div><dt>Streubreite</dt><dd class="zahl">6&nbsp;m</dd></div></dl>
+            <div class="breite-schiene" aria-hidden="true"><span class="breite-balken" data-anteil="26.0"></span></div>
+            <div class="breite-skala" aria-hidden="true"><span>0</span><span>Räumbreite im Vergleich, bis 5&nbsp;m</span></div>
           </div>
-          <dl class="maschine-daten"><div><dt>Streuer</dt><dd>700 l Trockenstoff oder Feuchtsalz 0,5 m³ und 200&nbsp;l&nbsp;Sole</dd></div><div><dt>Streubreite</dt><dd>6&nbsp;Meter</dd></div></dl>
-          <ul class="maschine-bereiche"><li>Gehwege</li><li>Innenhöfe</li><li>Eingänge</li></ul>
+          <dl class="maschine-daten"><div><dt>Streuer</dt><dd>700&nbsp;l Trockenstoff oder Feuchtsalz 0,5&nbsp;m³ und 200&nbsp;l&nbsp;Sole</dd></div><div><dt>Einsatz</dt><dd>Gehwege, Innenhöfe, Eingänge</dd></div></dl>
         </div>
       </article>
       <article class="maschine" data-tags="parkplatz gross" data-verzug="40">
         <div class="maschine-bild">
           <span class="maschine-foto" data-bild="hero-winterdienst-klein"></span>
-          <span class="maschine-klasse">Traktor</span>
+          <span class="maschine-klasse">Parkplätze</span>
         </div>
         <div class="maschine-koerper">
-          <h3>Traktor&nbsp;mit&nbsp;Vario-Schneepflug</h3>
-          <p class="maschine-zweck">Parkplätze, Zufahrten und Höfe, auf denen der Pflug in jede Richtung&nbsp;schieben&nbsp;muss.</p>
+          <div class="maschine-titel"><h3>Traktor</h3><p>mit Vario-Schneepflug</p></div>
+          <p class="maschine-zweck">Für Parkplätze, Zufahrten und Höfe, auf denen der Pflug in jede Richtung schieben&nbsp;muss.</p>
           <div class="breite">
-            <div class="breite-kopf"><span>Räumbreite</span><b class="zahl">3,00&nbsp;Meter</b></div>
-            <div class="breite-schiene"><span class="breite-balken" data-anteil="60.0"></span></div>
-            <div class="breite-skala"><span>0</span><span>5,00&nbsp;Meter</span></div>
+            <dl class="maschine-werte"><div><dt>Räumbreite</dt><dd class="zahl">3,00&nbsp;m</dd></div><div><dt>Streubreite</dt><dd class="zahl">8&nbsp;m</dd></div></dl>
+            <div class="breite-schiene" aria-hidden="true"><span class="breite-balken" data-anteil="60.0"></span></div>
+            <div class="breite-skala" aria-hidden="true"><span>0</span><span>Räumbreite im Vergleich, bis 5&nbsp;m</span></div>
           </div>
-          <dl class="maschine-daten"><div><dt>Streuer</dt><dd>Kugelmann Edelstahl, 1 bis 2 m³, 600&nbsp;l&nbsp;Sole</dd></div><div><dt>Streubreite</dt><dd>8&nbsp;Meter</dd></div><div><dt>Schneepflug</dt><dd>Vario-Pflüge von Wintec,&nbsp;Bucher,&nbsp;Rasco</dd></div></dl>
-          <ul class="maschine-bereiche"><li>Parkplätze</li><li>Zufahrten</li><li>Höfe</li></ul>
+          <dl class="maschine-daten"><div><dt>Streuer</dt><dd>Kugelmann Edelstahl, 1 bis 2&nbsp;m³, 600&nbsp;l&nbsp;Sole</dd></div><div><dt>Schneepflug</dt><dd>Vario-Pflüge von Wintec, Bucher,&nbsp;Rasco</dd></div></dl>
         </div>
       </article>
       <article class="maschine" data-tags="gross parkplatz strasse" data-verzug="80">
         <div class="maschine-bild">
           <span class="maschine-foto" data-bild="pflug-schneefall-klein"></span>
-          <span class="maschine-klasse">Unimog</span>
+          <span class="maschine-klasse">Gewerbe</span>
         </div>
         <div class="maschine-koerper">
-          <h3>Unimog</h3>
-          <p class="maschine-zweck">Gewerbe- und Industrieflächen, Zufahrten und Straßen. Wendig genug für Höfe, stark genug für&nbsp;die&nbsp;Straße.</p>
+          <div class="maschine-titel"><h3>Unimog</h3><p>Geräteträger für Hof und Straße</p></div>
+          <p class="maschine-zweck">Wendig genug für Höfe und Zufahrten, stark genug für Industrieflächen und&nbsp;Straßen.</p>
           <div class="breite">
-            <div class="breite-kopf"><span>Räumbreite</span><b class="zahl">2,50 bis 3,20&nbsp;Meter</b></div>
-            <div class="breite-schiene"><span class="breite-balken" data-anteil="64.0"></span></div>
-            <div class="breite-skala"><span>0</span><span>5,00&nbsp;Meter</span></div>
+            <dl class="maschine-werte"><div><dt>Räumbreite</dt><dd class="zahl">2,5–3,2&nbsp;m</dd></div><div><dt>Streubreite</dt><dd class="zahl">12&nbsp;m</dd></div></dl>
+            <div class="breite-schiene" aria-hidden="true"><span class="breite-balken" data-anteil="64.0"></span></div>
+            <div class="breite-skala" aria-hidden="true"><span>0</span><span>Räumbreite im Vergleich, bis 5&nbsp;m</span></div>
           </div>
-          <dl class="maschine-daten"><div><dt>Streuer</dt><dd>Kugelmann und Springer, 3 bis 4 m³, 1.800 bis 2.200&nbsp;l&nbsp;Sole</dd></div><div><dt>Streubreite</dt><dd>12&nbsp;Meter</dd></div><div><dt>Schneepflug</dt><dd>Schmidt,&nbsp;Rasco</dd></div></dl>
-          <ul class="maschine-bereiche"><li>Industrieareale</li><li>Zufahrten</li><li>Straßen</li></ul>
+          <dl class="maschine-daten"><div><dt>Streuer</dt><dd>Kugelmann und Springer, 3 bis 4&nbsp;m³, 1.800 bis 2.200&nbsp;l&nbsp;Sole</dd></div><div><dt>Schneepflug</dt><dd>Schmidt,&nbsp;Rasco</dd></div></dl>
         </div>
       </article>
       <article class="maschine" data-tags="strasse gross" data-verzug="120">
         <div class="maschine-bild">
           <span class="maschine-foto" data-bild="nacht-lkw-klein"></span>
-          <span class="maschine-klasse">LKW</span>
+          <span class="maschine-klasse">Straßen</span>
         </div>
         <div class="maschine-koerper">
-          <h3>LKW mit Streuer&nbsp;und&nbsp;Schneepflug</h3>
-          <p class="maschine-zweck">Straßen, Autobahnzubringer und große Gewerbeflächen mit&nbsp;langen&nbsp;Räumzügen.</p>
+          <div class="maschine-titel"><h3>Streu-LKW</h3><p>mit Streuer und Schneepflug</p></div>
+          <p class="maschine-zweck">Für Straßen, Autobahnzubringer und große Gewerbeflächen mit langen&nbsp;Räumzügen.</p>
           <div class="breite">
-            <div class="breite-kopf"><span>Räumbreite</span><b class="zahl">3,20 bis 5,00&nbsp;Meter</b></div>
-            <div class="breite-schiene"><span class="breite-balken" data-anteil="100.0"></span></div>
-            <div class="breite-skala"><span>0</span><span>5,00&nbsp;Meter</span></div>
+            <dl class="maschine-werte"><div><dt>Räumbreite</dt><dd class="zahl">3,2–5,0&nbsp;m</dd></div><div><dt>Streubreite</dt><dd class="zahl">12&nbsp;m</dd></div></dl>
+            <div class="breite-schiene" aria-hidden="true"><span class="breite-balken" data-anteil="100.0"></span></div>
+            <div class="breite-skala" aria-hidden="true"><span>0</span><span>Räumbreite im Vergleich, bis 5&nbsp;m</span></div>
           </div>
-          <dl class="maschine-daten"><div><dt>Streuer</dt><dd>Kugelmann und Springer, 5 bis 8 m³, 2.400 bis 3.500&nbsp;l&nbsp;Sole</dd></div><div><dt>Streutechnik</dt><dd>Feuchtsalz bis FS&nbsp;100,&nbsp;computergesteuert</dd></div><div><dt>Streubreite</dt><dd>12&nbsp;Meter</dd></div><div><dt>Schneepflug</dt><dd>Drutzel,&nbsp;Springer,&nbsp;Rasco</dd></div></dl>
-          <ul class="maschine-bereiche"><li>Straßen</li><li>Autobahn</li><li>Großflächen</li></ul>
+          <dl class="maschine-daten"><div><dt>Streuer</dt><dd>Kugelmann und Springer, 5 bis 8&nbsp;m³, 2.400 bis 3.500&nbsp;l Sole, Feuchtsalz bis FS&nbsp;100</dd></div><div><dt>Schneepflug</dt><dd>Drutzel, Springer,&nbsp;Rasco</dd></div></dl>
         </div>
       </article>
     </div>
@@ -1228,23 +1238,33 @@
         <p class="eyebrow">Einsatzgebiet</p>
         <h2 class="d-l">Wo wir&nbsp;fahren</h2>
         <p class="lead abstand-o">
-          Von unserer Betriebsstätte in Taunusstein aus fahren wir drei Bereiche. Je größer
-          die Fläche, desto weiter&nbsp;das&nbsp;Gebiet.
+          Von unserer Betriebsstätte in Taunusstein aus betreuen wir drei Bereiche: Gehwege im
+          Kerngebiet, Gewerbeflächen im Umland und Straßen im ganzen Rhein-Main-Gebiet. Tippen Sie
+          einen Bereich an, um&nbsp;ihn&nbsp;hervorzuheben.
         </p>
 
-        <div class="zonen">
-          <div class="zone zone--gehwege">
-            <h3>Gehwege</h3>
-            <p>Taunusstein mit Neuhof, Wehen, Hahn, Bleidenstadt und Seitzenhahn, Bad Schwalbach sowie die&nbsp;Kernstadt&nbsp;Idstein.</p>
-          </div>
-          <div class="zone zone--gewerbe">
-            <h3>Gewerbe</h3>
-            <p>Taunusstein, Wiesbaden, Hünstetten, Bad Schwalbach und&nbsp;Bad&nbsp;Camberg.</p>
-          </div>
-          <div class="zone zone--strasse">
-            <h3>Straßen und&nbsp;Autobahn</h3>
-            <p>Das Rhein-Main-Gebiet rund um Limburg, Wiesbaden, Mainz, Frankfurt und Offenbach, mit dem Rheingau-Taunus-Kreis, Hochtaunus, Main-Taunus, Groß-Gerau&nbsp;und&nbsp;Limburg-Weilburg.</p>
-          </div>
+        <div class="zonen" role="group" aria-label="Bereich auf der Karte hervorheben">
+          <button type="button" class="zone zone--gehwege" data-zone="gehwege" aria-pressed="false">
+            <span class="zone-farbe" aria-hidden="true"></span>
+            <span class="zone-text">
+              <span class="zone-kopf"><strong>Gehwege</strong><span class="zone-radius">Kerngebiet</span></span>
+              <span class="zone-orte">Taunusstein mit Neuhof, Wehen, Hahn, Bleidenstadt und Seitzenhahn, Bad Schwalbach sowie die&nbsp;Kernstadt&nbsp;Idstein</span>
+            </span>
+          </button>
+          <button type="button" class="zone zone--gewerbe" data-zone="gewerbe" aria-pressed="false">
+            <span class="zone-farbe" aria-hidden="true"></span>
+            <span class="zone-text">
+              <span class="zone-kopf"><strong>Gewerbe</strong><span class="zone-radius">Umland</span></span>
+              <span class="zone-orte">Taunusstein, Wiesbaden, Hünstetten, Bad Schwalbach und&nbsp;Bad&nbsp;Camberg</span>
+            </span>
+          </button>
+          <button type="button" class="zone zone--strasse" data-zone="strasse" aria-pressed="false">
+            <span class="zone-farbe" aria-hidden="true"></span>
+            <span class="zone-text">
+              <span class="zone-kopf"><strong>Straßen und Autobahn</strong><span class="zone-radius">Rhein-Main</span></span>
+              <span class="zone-orte">Rund um Limburg, Wiesbaden, Mainz, Frankfurt und Offenbach, mit Rheingau-Taunus, Hochtaunus, Main-Taunus, Groß-Gerau und&nbsp;Limburg-Weilburg</span>
+            </span>
+          </button>
         </div>
 
         <p class="hinweis-klein">
@@ -1273,8 +1293,8 @@
     <div class="faq-gitter">
 
       <div class="faq-intro auf">
-        <p class="eyebrow grau">Antworten</p>
-        <h2 class="d-l">Häufige Fragen zum&nbsp;Winterdienst</h2>
+        <p class="eyebrow grau">Winterdienst</p>
+        <h2 class="d-l">Häufige Fragen</h2>
         <p class="lead">
           Die Antworten stammen aus dem Betrieb und aus den Satzungen, die für unser
           Einsatzgebiet gelten. Wo es auf Ihren Ort ankommt, verlinken wir den

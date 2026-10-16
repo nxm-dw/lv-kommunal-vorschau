@@ -207,7 +207,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .feld:focus-visible .feld-cta { background: var(--eis-tief); }
 
 .feld-innen {
-  width: min(100%, 30rem); position: relative;
+  width: min(100%, 36rem); position: relative;
   display: flex; flex-direction: column; align-items: center;
 }
 
@@ -243,7 +243,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .feld-titel {
   display: block; white-space: nowrap; text-wrap: nowrap;
   font-family: var(--display); color: inherit;
-  font-size: clamp(2.3rem, 6.2vw, 5.4rem); font-weight: 800; line-height: 1;
+  font-size: clamp(2.3rem, 5.6vw, 5rem); font-weight: 800; line-height: 1;
   letter-spacing: -.025em; margin: 0 0 1rem;
   text-shadow: 0 2px 18px rgba(4,12,18,.92), 0 1px 48px rgba(4,12,18,.8);
 }

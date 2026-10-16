@@ -112,28 +112,15 @@
 
     /* Einsatzgebiet: drei Bereiche, der größte zuerst */
     var STIL = {
-      strasse: { fill: "#009EE0", fo: ".07", st: "#5CC8F2", so: ".35", dash: "3 6" },
-      gewerbe: { fill: "#009EE0", fo: ".14", st: "#5CC8F2", so: ".6", dash: "7 6" },
-      gehwege: { fill: "#5CC8F2", fo: ".28", st: "#BFE9FA", so: ".9", dash: "" }
+      strasse: { fill: "#009EE0", fo: ".13", st: "#5CC8F2", so: ".75", dash: "" },
+      gewerbe: { fill: "#FFB01F", fo: ".2",  st: "#FFB01F", so: ".95", dash: "" },
+      gehwege: { fill: "#7FD48F", fo: ".42", st: "#B6EDBF", so: "1",   dash: "" }
     };
     zonen.forEach(function (z) {
       var st = STIL[z.klasse] || STIL.gewerbe;
       var h = huelleUm(z.orte.map(function (o) { return P(o[0], o[1]); }), z.dehnung);
-      svg.push('<path class="gebiet-flaeche gebiet-zone--' + z.klasse + '" d="' + weich(h) + '" fill="' + st.fill + '" fill-opacity="' + st.fo + '" ' +
-        'stroke="' + st.st + '" stroke-opacity="' + st.so + '" stroke-width="1.5"' + (st.dash ? ' stroke-dasharray="' + st.dash + '"' : "") + '/>');
-    });
-
-    /* Verbindungen von den Betriebsstätten zu den Orten */
-    var betriebe = LVK.gebietOrte.filter(function (o) { return o.typ === "betrieb"; });
-    LVK.gebietOrte.filter(function (o) { return o.typ === "ort"; }).forEach(function (o, i) {
-      var z = P(o.lat, o.lon);
-      var naehe = betriebe.map(function (bb) {
-        var q = P(bb.lat, bb.lon);
-        return { q: q, d: Math.hypot(q.x - z.x, q.y - z.y) };
-      }).sort(function (a, b) { return a.d - b.d; })[0];
-      svg.push('<line class="gebiet-linie" data-i="' + i + '" x1="' + naehe.q.x.toFixed(1) + '" y1="' + naehe.q.y.toFixed(1) +
-        '" x2="' + z.x.toFixed(1) + '" y2="' + z.y.toFixed(1) +
-        '" stroke="#5CC8F2" stroke-opacity=".3" stroke-width="1" stroke-dasharray="3 4"/>');
+      svg.push('<g class="gebiet-zone" data-zone="' + z.klasse + '"><path class="gebiet-flaeche gebiet-zone--' + z.klasse + '" d="' + weich(h) + '" fill="' + st.fill + '" fill-opacity="' + st.fo + '" ' +
+        'stroke="' + st.st + '" stroke-opacity="' + st.so + '" stroke-width="2"/></g>');
     });
 
     /* Orientierungsmarken */
@@ -230,6 +217,24 @@
   }
 
   bauen();
+
+  /* Bereichskarten links heben ihren Bereich auf der Karte hervor */
+  var knoepfe = document.querySelectorAll(".zone[data-zone]");
+  function fokus(z) {
+    if (z) box.setAttribute("data-fokus", z); else box.removeAttribute("data-fokus");
+  }
+  var fest = null;
+  knoepfe.forEach(function (k) {
+    var z = k.getAttribute("data-zone");
+    k.addEventListener("click", function () {
+      fest = fest === z ? null : z;
+      knoepfe.forEach(function (x) { x.setAttribute("aria-pressed", String(x.getAttribute("data-zone") === fest)); });
+      fokus(fest);
+    });
+    k.addEventListener("mouseenter", function () { fokus(z); });
+    k.addEventListener("mouseleave", function () { fokus(fest); });
+  });
+
   var neu;
   addEventListener("resize", function () {
     clearTimeout(neu);

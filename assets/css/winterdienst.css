@@ -1708,7 +1708,7 @@ html:not(.js) .achse { display: none; }
 .wahl--gross .wahl-ikon { width: 54px; height: 54px; border-radius: 14px; }
 .wahl--gross .wahl-text strong { font-size: 1.12rem; }
 
-.wahl--klein { flex-direction: column; align-items: center; text-align: center; gap: .6rem; padding: 1rem .8rem; }
+.wahl--klein { flex-direction: column; align-items: center; text-align: center; gap: .6rem; padding: 1rem .55rem; }
 .wahl--klein .wahl-ikon { width: 40px; height: 40px; }
 .wahl--klein .wahl-text strong { font-size: .86rem; }
 
@@ -2089,3 +2089,195 @@ html:not(.js) .achse { display: none; }
 .bilanz-tabelle tbody th, .bilanz-tabelle tfoot th { hyphens: auto; -webkit-hyphens: auto; overflow-wrap: anywhere; }
 @media (max-width: 420px) { .bilanz-tabelle { font-size: .8rem; } .bilanz-tabelle td.zahl { white-space: normal; } }
 @media (max-width: 420px) { h1, h2 { hyphens: auto; -webkit-hyphens: auto; } }
+
+/* ------------------------------- Winternacht: Szenariowahl, Version 2 (16.10.) */
+.szenario-wahl {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr); align-items: stretch; gap: .75rem;
+  width: 100%; padding: 0; border: 0; background: none; flex: none;
+}
+.szenario-label {
+  align-self: center; padding-right: .5rem;
+  font-family: var(--mono); font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; color: #8FA9BC;
+  display: flex; align-items: center; gap: .6rem;
+}
+.szenario-label::after { content: ""; width: 34px; height: 1px; background: rgba(143, 169, 188, .5); }
+.szenario-knopf {
+  position: relative; display: flex; align-items: center; gap: .9rem; text-align: left;
+  padding: .85rem 1.1rem; border-radius: 14px; cursor: pointer;
+  background: rgba(255, 255, 255, .035); border: 1.5px solid rgba(255, 255, 255, .12); color: #A9C3D4;
+  transition: background .25s, border-color .25s, box-shadow .25s, color .25s, transform .2s;
+}
+.szenario-knopf:hover { background: rgba(255, 255, 255, .07); border-color: rgba(92, 200, 242, .5); color: var(--weiss); transform: translateY(-1px); }
+.szenario-ikon {
+  flex: none; width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center;
+  background: rgba(255, 255, 255, .06); color: #8FA9BC; transition: background .25s, color .25s;
+}
+.szenario-ikon svg { width: 26px; height: 26px; }
+.szenario-text { display: grid; gap: .15rem; min-width: 0; }
+.szenario-text strong { font-size: 1.12rem; font-weight: 700; letter-spacing: -.01em; color: inherit; }
+.szenario-text small { font-family: var(--mono); font-size: .7rem; letter-spacing: .04em; color: #7E9BAD; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* Statusmarke rechts: aktiv mit Haken, sonst Hinweis zum Umschalten */
+.szenario-status { margin-left: auto; flex: none; font-family: var(--mono); font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; }
+.szenario-knopf[aria-pressed="false"] .szenario-status::before { content: "Umschalten"; color: #6E8A9C; }
+.szenario-knopf[aria-pressed="true"] .szenario-status {
+  width: 26px; height: 26px; border-radius: 50%; background: var(--eis);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+  background-size: 14px; background-position: center; background-repeat: no-repeat;
+}
+.szenario-knopf[aria-pressed="true"] {
+  color: var(--weiss); border-color: var(--eis);
+  background: linear-gradient(135deg, rgba(0, 158, 224, .32), rgba(0, 119, 168, .14));
+  box-shadow: 0 0 0 4px rgba(0, 158, 224, .14), 0 10px 34px rgba(0, 158, 224, .28);
+}
+.szenario-knopf[aria-pressed="true"] .szenario-ikon { background: var(--eis); color: var(--weiss); }
+.szenario-knopf[aria-pressed="true"] .szenario-text small { color: #CDEBF8; }
+.szenario-knopf:focus-visible { outline: 2px solid var(--eis-hell); outline-offset: 3px; }
+/* Ruhiges Pulsieren am Umschalter, solange niemand gewechselt hat */
+@media (prefers-reduced-motion: no-preference) {
+  .szenario-wahl:not(.benutzt) .szenario-knopf[aria-pressed="false"] .szenario-ikon { animation: szenario-puls 2.4s ease-in-out infinite; }
+}
+@keyframes szenario-puls { 0%, 100% { box-shadow: 0 0 0 0 rgba(92, 200, 242, 0); } 50% { box-shadow: 0 0 0 6px rgba(92, 200, 242, .18); } }
+@media (max-width: 900px) {
+  .szenario-wahl { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .szenario-label { display: none; }
+}
+@media (max-width: 620px) {
+  .szenario-knopf { padding: .65rem .7rem; gap: .6rem; }
+  .szenario-ikon { width: 36px; height: 36px; }
+  .szenario-ikon svg { width: 20px; height: 20px; }
+  .szenario-text strong { font-size: .95rem; }
+  .szenario-text small, .szenario-status::before { display: none; }
+  .szenario-knopf[aria-pressed="true"] .szenario-status { width: 20px; height: 20px; background-size: 11px; }
+}
+@media (max-height: 700px) { .szenario-knopf { padding-block: .55rem; } .szenario-ikon { width: 36px; height: 36px; } }
+
+/* ------------------------------- Einsatzgebiet, Version 2: drei Farben (16.10.) */
+.gebiet-karte { --f-gehwege: #7FD48F; --f-gewerbe: #FFB01F; --f-strasse: #5CC8F2; }
+.zonen { display: grid; gap: .6rem; margin: 1.6rem 0 1.4rem; }
+.zone {
+  --farbe: var(--eis-hell);
+  display: flex; align-items: stretch; gap: 1rem; width: 100%; text-align: left; cursor: pointer;
+  padding: 1rem 1.1rem; border-radius: 14px; font: inherit; color: #C6D8E3;
+  background: rgba(255, 255, 255, .03); border: 1.5px solid rgba(255, 255, 255, .1);
+  transition: background .2s, border-color .2s, box-shadow .2s, transform .2s;
+}
+.zone::before { content: none; }
+.zone--gehwege { --farbe: #7FD48F; }
+.zone--gewerbe { --farbe: #FFB01F; }
+.zone--strasse { --farbe: #5CC8F2; }
+.zone-farbe { flex: none; width: 6px; border-radius: 6px; background: var(--farbe); box-shadow: 0 0 14px var(--farbe); }
+.zone-text { display: grid; gap: .3rem; min-width: 0; }
+.zone-kopf { display: flex; align-items: baseline; justify-content: space-between; gap: .8rem; flex-wrap: wrap; }
+.zone-kopf strong { font-family: var(--display); font-size: 1.08rem; font-weight: 700; color: var(--weiss); }
+.zone-radius { font-family: var(--mono); font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--farbe); }
+.zone-orte { font-size: .9rem; line-height: 1.5; color: #A9C3D4; }
+.zone:hover, .zone[aria-pressed="true"] { background: rgba(255, 255, 255, .06); border-color: var(--farbe); transform: translateX(3px); }
+.zone[aria-pressed="true"] { box-shadow: 0 0 0 3px rgba(255, 255, 255, .04), 0 8px 26px rgba(0, 0, 0, .3); }
+.zone:focus-visible { outline: 2px solid var(--farbe); outline-offset: 3px; }
+.gebiet-zone { transition: opacity .3s; }
+.gebiet-karte[data-fokus] .gebiet-zone { opacity: .12; }
+.gebiet-karte[data-fokus="gehwege"] .gebiet-zone[data-zone="gehwege"],
+.gebiet-karte[data-fokus="gewerbe"] .gebiet-zone[data-zone="gewerbe"],
+.gebiet-karte[data-fokus="strasse"] .gebiet-zone[data-zone="strasse"] { opacity: 1; }
+.gebiet-legende-gehwege::before { background: #7FD48F; box-shadow: none; border-radius: 3px; }
+.gebiet-legende-gewerbe::before { background: #FFB01F; box-shadow: none; border-radius: 3px; }
+.gebiet-legende-strasse::before { background: #5CC8F2; box-shadow: none; border-radius: 3px; }
+
+/* ------------------------------- Einsatzbilanz, Version 2: Leitstand-Karten (16.10.) */
+.bilanz-gitter { align-items: stretch; }
+.bilanz-karte {
+  --ton: var(--eis); --ton-hell: var(--eis-hell);
+  position: relative; display: flex; flex-direction: column; overflow: hidden; isolation: isolate;
+  padding: clamp(1.4rem, 2.8vw, 2.2rem); border-radius: 22px; border: 1px solid rgba(255, 255, 255, .08);
+  background: radial-gradient(120% 90% at 100% 0%, rgba(0, 158, 224, .22), transparent 60%), linear-gradient(160deg, #10283A, var(--nacht) 70%);
+  color: #C6D8E3; box-shadow: 0 24px 60px rgba(10, 24, 34, .22);
+}
+.bilanz-karte--schnee { --ton: #8FB8D0; --ton-hell: #D6E7F1;
+  background: radial-gradient(120% 90% at 100% 0%, rgba(214, 231, 241, .14), transparent 60%), linear-gradient(160deg, #142A3A, var(--nacht) 70%); }
+.bilanz-kopf { display: flex; align-items: center; gap: .85rem; margin-bottom: 1.4rem; }
+.bilanz-ikon { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--ton); color: var(--weiss); flex: none; }
+.bilanz-karte--schnee .bilanz-ikon { color: var(--nacht); }
+.bilanz-art { margin: 0; display: grid; font-family: var(--display); font-weight: 700; font-size: 1.15rem; color: var(--weiss); text-transform: none; letter-spacing: 0; }
+.bilanz-art small { font-family: var(--mono); font-weight: 400; font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ton-hell); }
+.bilanz-gesamt { display: flex; align-items: baseline; gap: .5rem; margin: 0; font-size: inherit; }
+.bilanz-zahl { font-family: var(--display); font-weight: 800; font-size: clamp(2.6rem, 5vw, 4.2rem); line-height: 1; letter-spacing: -.035em; color: var(--weiss); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bilanz-einheit { font-family: var(--display); font-weight: 600; font-size: clamp(1.1rem, 1.8vw, 1.5rem); color: var(--ton-hell); }
+.bilanz-unter { margin: .55rem 0 1.4rem; font-size: .95rem; color: #A9C3D4; }
+/* Gestapelter Balken: wie viel Fläche jede Fahrzeuggruppe trägt */
+.bilanz-anteile { display: flex; gap: 3px; height: 12px; margin-bottom: 1.3rem; }
+.bilanz-segment { flex: var(--anteil, 1) 1 0; min-width: 8px; border-radius: 4px; }
+.f0 { background: var(--ton); }
+.f1 { background: var(--salz); }
+.f2 { background: #7FD48F; }
+.f3 { background: #C7A6F5; }
+.bilanz-liste { list-style: none; margin: 0 0 auto; padding: 0; display: grid; }
+.bilanz-zeile {
+  display: grid; grid-template-columns: 10px 2.6rem minmax(0, 1fr) auto; align-items: center; gap: .8rem;
+  padding: .75rem 0; border-top: 1px solid rgba(255, 255, 255, .08);
+}
+.bilanz-farbe { width: 10px; height: 10px; border-radius: 3px; }
+.bilanz-anzahl { font-family: var(--display); font-weight: 700; font-size: 1.05rem; color: var(--weiss); font-variant-numeric: tabular-nums; }
+.bilanz-name { display: grid; font-weight: 600; color: var(--weiss); min-width: 0; }
+.bilanz-name small { font-weight: 400; font-size: .8rem; color: #8FA9BC; }
+.bilanz-wert { font-family: var(--display); font-weight: 600; font-variant-numeric: tabular-nums; color: #DCEAF2; white-space: nowrap; text-align: right; }
+@media (max-width: 420px) {
+  .bilanz-zeile { grid-template-columns: 10px 2.2rem minmax(0, 1fr); }
+  .bilanz-wert { grid-column: 3; text-align: left; font-size: .9rem; color: var(--ton-hell); }
+}
+
+/* ------------------------------- Nachweis, Version 2 (16.10.) */
+.objekt-auswahl { display: grid; gap: .6rem; max-width: 30rem; }
+.objekt-wahl {
+  display: flex; align-items: center; gap: .9rem; width: 100%; text-align: left; cursor: pointer; font: inherit;
+  padding: .8rem 1rem; border-radius: 14px; background: var(--weiss); color: var(--nacht);
+  border: 1.5px solid var(--raum-2); transition: border-color .2s, box-shadow .2s, transform .2s;
+}
+.objekt-wahl:hover { border-color: var(--eis); transform: translateX(3px); }
+.objekt-wahl:focus-visible { outline: 2px solid var(--eis-tief); outline-offset: 3px; }
+.objekt-ikon { flex: none; width: 42px; height: 42px; border-radius: 11px; display: grid; place-items: center; background: var(--raum); color: var(--eis-tief); transition: background .2s, color .2s; }
+.objekt-text { display: grid; min-width: 0; }
+.objekt-text strong { font-weight: 700; font-size: 1rem; }
+.objekt-text small { font-size: .84rem; color: var(--stahl-hell); }
+.objekt-wahl::after { content: ""; margin-left: auto; flex: none; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--raum-2); }
+.objekt-wahl[aria-pressed="true"] { border-color: var(--eis); box-shadow: 0 0 0 4px rgba(0, 158, 224, .12), 0 10px 26px rgba(10, 24, 34, .08); }
+.objekt-wahl[aria-pressed="true"] .objekt-ikon { background: var(--eis-tief); color: var(--weiss); }
+.objekt-wahl[aria-pressed="true"]::after {
+  border-color: var(--eis-tief); background: var(--eis-tief) no-repeat center / 12px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+}
+/* Belegdaten: vier kurze Felder oben, die langen darunter in doppelter Breite */
+.sammel-daten { gap: 1px; background: var(--raum-2); border: 1px solid var(--raum-2); }
+.sammel-daten div, .sammel-daten div:nth-child(4n), .sammel-daten div:nth-last-child(-n+4) { border: 0; background: var(--weiss); min-width: 0; }
+.sammel-daten div:nth-child(n+5) { grid-column: span 2; }
+.sammel-daten dd { overflow-wrap: anywhere; }
+@media (max-width: 760px) {
+  .sammel-daten div, .sammel-daten div:nth-child(4n), .sammel-daten div:nth-child(2n), .sammel-daten div:nth-last-child(-n+4), .sammel-daten div:nth-last-child(-n+2) { border: 0; }
+  .sammel-daten div:nth-child(n+5) { grid-column: span 2; }
+}
+
+/* ------------------------------- Fuhrpark, Version 2: gleich gebaute Karten (16.10.)
+   Subgrid richtet Titel, Text, Werte und Daten aller Karten einer Reihe aneinander aus. */
+.maschine { display: grid; grid-template-rows: subgrid; grid-row: span 5; gap: 0; }
+.maschine-koerper { display: contents; }
+.maschine-koerper > * { padding-inline: 1.3rem; min-width: 0; }
+.maschine-titel { padding-top: 1.2rem; }
+.maschine-titel h3 { font-size: 1.25rem; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.maschine-titel p { margin: .15rem 0 0; font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; color: var(--eis-tief); }
+.maschine-zweck { margin: .7rem 0 1.1rem; }
+.breite { margin: 0; padding-bottom: 1.1rem; }
+.maschine-werte { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin: 0 0 .8rem; background: var(--raum-2); border-radius: 10px; overflow: hidden; border: 1px solid var(--raum-2); }
+.maschine-werte div { background: var(--raum); padding: .55rem .7rem; min-width: 0; }
+.maschine-werte dt { font-family: var(--mono); font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; color: var(--stahl-hell); }
+.maschine-werte dd { margin: .1rem 0 0; font-family: var(--display); font-weight: 700; font-size: 1.2rem; color: var(--nacht); white-space: nowrap; }
+.breite-skala span:last-child { text-align: right; }
+.maschine-daten { margin: 0; padding-bottom: 1.4rem; display: grid; gap: 0; align-content: start; }
+.maschine-daten > div { display: block; padding: .6rem 0 0; margin-top: .6rem; border-top: 1px solid var(--raum-2); }
+.maschine-daten > div:first-child { margin-top: 0; }
+.maschine-daten dt { margin-bottom: .15rem; }
+.maschine-daten dd { overflow-wrap: break-word; }
+/* Szenariowahl: Kennzahlen dürfen umbrechen statt abgeschnitten zu werden */
+.szenario-text small { white-space: normal; overflow: visible; text-overflow: clip; }
+@media (max-width: 1180px) { .szenario-wahl { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .szenario-label { display: none; } }
+@media (max-width: 480px) { .szenario-ikon { display: none; } .szenario-knopf { padding: .7rem .8rem; } }
+#pflicht-art .wahl--klein { padding-inline: .35rem; }
+#pflicht-art .wahl-text strong { font-size: .8rem; }
