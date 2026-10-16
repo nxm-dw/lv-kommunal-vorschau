@@ -178,13 +178,21 @@
       karte.on("click", function () { karte.scrollWheelZoom.enable(); });
       karte.on("mouseout", function () { karte.scrollWheelZoom.disable(); });
 
-      sat = L.tileLayer(
-        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-        {
-          maxZoom: 21, maxNativeZoom: 19,
-          attribution: "Luftbild &copy; Esri, Maxar, Earthstar Geographics"
-        }
-      ).addTo(karte);
+      /* Luftbild: amtliche Orthophotos der Länder (DOP20, 20 cm je Pixel) über
+         dem weltweiten Esri-Bild. Außerhalb von Hessen und Rheinland-Pfalz
+         liefern die Landesdienste transparente Kacheln, dort bleibt Esri sichtbar. */
+      var dop = function (url, ebene, quelle) {
+        return L.tileLayer.wms(url, {
+          layers: ebene, format: "image/png", transparent: true, version: "1.3.0",
+          tileSize: 512, maxZoom: 21, attribution: quelle
+        });
+      };
+      sat = L.layerGroup([
+        L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+          { maxZoom: 21, maxNativeZoom: 19, attribution: "Esri, Maxar" }),
+        dop("https://geo4.service24.rlp.de/wms/rp_dop20.fcgi", "rp_dop20", "Luftbild RP &copy; GeoBasis-DE / LVermGeoRP"),
+        dop("https://www.gds-srv.hessen.de/cgi-bin/lika-services/ogc-free-images.ows", "he_dop20_rgb", "Luftbild HE &copy; HVBG")
+      ]).addTo(karte);
 
       plan = L.tileLayer.wms("https://sgx.geodatenzentrum.de/wms_basemapde", {
         layers: "de_basemapde_web_raster_farbe",

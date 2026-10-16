@@ -118,3 +118,8 @@
   .kopf .navi .kopf-tel, .kopf--fest .navi .kopf-tel { margin: 1rem 0 0; color: #fff; border-color: rgba(255, 255, 255, .28); text-align: center; justify-content: center; }
 }
 @media (max-width: 1180px) and (prefers-reduced-motion: reduce) { .kopf .navi { transition: none; } }
+
+/* Kein Verkleinern beim Scrollen: Höhe, Logo und Abstände bleiben gleich,
+   nur der Hintergrund wechselt. So springt nichts. */
+.kopf, .kopf--fest { padding: .75rem 0; transition: background .25s, box-shadow .25s; }
+.kopf .kopf-logo img, .kopf--fest .kopf-logo img { height: 38px; transition: none; }

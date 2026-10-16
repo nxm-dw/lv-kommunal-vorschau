@@ -2343,3 +2343,4 @@ html:not(.js) .achse { display: none; }
 @media (max-width: 700px) { .fuss-gitter:has(> .fuss-leistungen) { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 420px) { .fuss-gitter:has(> .fuss-leistungen) { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 420px) { .brotkrumen { letter-spacing: .06em; } .brotkrumen span { margin: 0 .3rem; } }
+#objekt-karte { height: clamp(380px, 64vh, 680px); }
