@@ -2281,3 +2281,65 @@ html:not(.js) .achse { display: none; }
 @media (max-width: 480px) { .szenario-ikon { display: none; } .szenario-knopf { padding: .7rem .8rem; } }
 #pflicht-art .wahl--klein { padding-inline: .35rem; }
 #pflicht-art .wahl-text strong { font-size: .8rem; }
+
+/* ------------------------------- Leistungsseiten Winterdienst (SEO/GEO, 16.10.)
+   Kurzfakten unter dem Hero, Info-Tabellen, Protokollablauf, Themenkarten
+   auf der Hauptseite und die fünfte Fußspalte "Leistungen". */
+.leistung-h1 { max-width: 15ch; }
+.sek-fakten { background: var(--nacht); padding: 0 0 clamp(2.4rem, 5vw, 3.6rem); }
+.kurzfakten {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; margin: 0;
+  background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .1); border-radius: 16px; overflow: hidden;
+}
+.kurzfakt { background: var(--nacht-2); padding: 1.1rem 1.2rem; min-width: 0; }
+.kurzfakt dt { font-family: var(--mono); font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--eis-hell); margin-bottom: .35rem; }
+.kurzfakt dd { margin: 0; display: grid; gap: .2rem; font-family: var(--display); font-weight: 700; font-size: clamp(1.15rem, 1.8vw, 1.45rem); line-height: 1.15; color: var(--weiss); }
+.kurzfakt dd small { font-family: var(--body); font-weight: 400; font-size: .85rem; line-height: 1.4; color: #A9C3D4; }
+@media (max-width: 900px) { .kurzfakten { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 420px) { .kurzfakten { grid-template-columns: minmax(0, 1fr); } }
+
+.info-tabelle-block { margin-top: clamp(2.5rem, 5vw, 3.5rem); }
+.info-tabelle-titel { font-size: 1.2rem; margin: 0 0 1rem; }
+.info-tabelle-block .tabelle-rolle { overflow-x: auto; border: 1px solid var(--raum-2); border-radius: 14px; }
+.info-tabelle { width: 100%; min-width: 640px; border-collapse: collapse; font-size: .93rem; background: var(--weiss); }
+.info-tabelle th, .info-tabelle td { text-align: left; vertical-align: top; padding: .85rem 1rem; border-bottom: 1px solid var(--raum-2); }
+.info-tabelle thead th { font-family: var(--mono); font-weight: 500; font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--stahl-hell); background: var(--raum); }
+.info-tabelle tbody th { font-weight: 700; color: var(--nacht); }
+.info-tabelle td { color: var(--stahl); }
+.info-tabelle tbody tr:last-child > * { border-bottom: 0; }
+.info-tabelle-block .hinweis-klein { margin-top: .9rem; }
+
+.ablauf { list-style: none; counter-reset: schritt; margin: clamp(2.5rem, 5vw, 3.5rem) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.ablauf li { counter-increment: schritt; display: grid; gap: .3rem; align-content: start; padding: 1.1rem 1.2rem; border-radius: 14px; background: var(--raum); border: 1px solid var(--raum-2); min-width: 0; }
+.ablauf li::before { content: counter(schritt, decimal-leading-zero); font-family: var(--mono); font-size: .7rem; letter-spacing: .12em; color: var(--eis-tief); }
+.ablauf strong { font-family: var(--display); font-size: 1.05rem; }
+.ablauf span { font-size: .92rem; color: var(--stahl); }
+@media (max-width: 900px) { .ablauf { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .ablauf { grid-template-columns: minmax(0, 1fr); } }
+
+.themen { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+.themen li { display: flex; min-width: 0; }
+.thema {
+  position: relative; display: grid; grid-template-rows: auto auto 1fr auto; gap: .45rem; width: 100%;
+  padding: 1.3rem 1.3rem 1.1rem; border-radius: 16px; text-decoration: none; color: var(--nacht);
+  background: var(--weiss); border: 1.5px solid var(--raum-2); transition: border-color .2s, box-shadow .2s, transform .2s;
+}
+.thema:hover { border-color: var(--eis); box-shadow: 0 14px 34px rgba(10, 24, 34, .1); transform: translateY(-3px); }
+.thema:focus-visible { outline: 2px solid var(--eis-tief); outline-offset: 3px; }
+.thema-art { font-family: var(--mono); font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--eis-tief); }
+.thema strong { font-family: var(--display); font-size: 1.15rem; line-height: 1.2; }
+.thema-text { font-size: .9rem; color: var(--stahl); }
+.thema-pfeil { justify-self: start; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--raum); color: var(--eis-tief); margin-top: .4rem; transition: background .2s, color .2s; }
+.thema:hover .thema-pfeil { background: var(--eis-tief); color: var(--weiss); }
+@media (max-width: 1100px) { .themen { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 800px) { .themen { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .themen { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .thema, .thema:hover { transition: none; transform: none; } }
+
+/* Fünfte Fußspalte "Leistungen", nur wo sie vorhanden ist */
+.fuss-gitter:has(> .fuss-leistungen) { grid-template-columns: 1.4fr repeat(4, minmax(0, 1fr)); gap: 2rem; }
+.fuss-leistungen a[aria-current="page"] { color: var(--weiss); }
+@media (max-width: 1100px) { .fuss-gitter:has(> .fuss-leistungen) { grid-template-columns: repeat(3, minmax(0, 1fr)); } .fuss-gitter:has(> .fuss-leistungen) > :first-child { grid-column: 1 / -1; } }
+@media (max-width: 700px) { .fuss-gitter:has(> .fuss-leistungen) { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 420px) { .fuss-gitter:has(> .fuss-leistungen) { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 420px) { .brotkrumen { letter-spacing: .06em; } .brotkrumen span { margin: 0 .3rem; } }
