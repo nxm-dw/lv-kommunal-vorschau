@@ -501,3 +501,36 @@ html:not(.js) .achse { display: none; }
 /* Mäharbeiten: echter Einstieg statt „In Entwicklung", in Grün */
 .feld-cta--gruen { background: #2F5A27; box-shadow: none; }
 .feld--maeh:hover .feld-cta--gruen, .feld--maeh:focus-visible .feld-cta--gruen { background: #3C7032; box-shadow: 0 10px 32px rgba(76, 140, 63, .45); }
+
+/* ----------------------------------------------------------------------------
+   Ein Logo für beide Bereiche: mittig auf der Trennkante, als Glaskarte.
+   Der Rand läuft von Eisblau (Winterdienst) nach Grün (Mäharbeiten).
+   ---------------------------------------------------------------------------- */
+.feld-logo, .feld-wortmarke { display: none; }
+.tor-marke {
+  position: absolute; z-index: 6; left: 50%; top: clamp(1.4rem, 4.5vh, 2.8rem); transform: translateX(-50%);
+  padding: clamp(.9rem, 1.8vh, 1.2rem) clamp(1.3rem, 2.4vw, 1.9rem); border-radius: 20px;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(rgba(6, 15, 20, .62), rgba(6, 15, 20, .62)) padding-box,
+    linear-gradient(90deg, rgba(92, 200, 242, .85), rgba(255, 255, 255, .35) 50%, rgba(169, 207, 151, .85)) border-box;
+  -webkit-backdrop-filter: blur(16px) saturate(1.2); backdrop-filter: blur(16px) saturate(1.2);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .38), 0 0 0 6px rgba(255, 255, 255, .03);
+  pointer-events: none;
+}
+.tor-marke img { display: block; height: clamp(46px, 6.2vh, 64px); width: auto; }
+/* Die Kante beginnt unter der Karte */
+.tor-felder::after {
+  background: linear-gradient(to bottom,
+    transparent 0%, transparent 9%, rgba(255,255,255,.35) 14%,
+    rgba(92,200,242,.85) 48%, rgba(169,207,151,.85) 52%,
+    rgba(255,255,255,.3) 82%, transparent 100%);
+}
+.tor:not(.tor--sparsam) .tor-marke { animation: marke-auf 1s cubic-bezier(.2,.8,.25,1) .15s backwards; }
+@keyframes marke-auf { from { opacity: 0; transform: translate(-50%, -12px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@media (max-width: 859px) {
+  .tor-marke { position: relative; left: auto; top: auto; transform: none; align-self: center; margin: 1.1rem auto .9rem; }
+  .tor-marke img { height: 40px; }
+  .tor:not(.tor--sparsam) .tor-marke { animation-name: tor-auf; }
+}
+@media (prefers-reduced-motion: reduce) { .tor .tor-marke { animation: none; } }
