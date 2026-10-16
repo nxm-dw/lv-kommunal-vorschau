@@ -33,24 +33,63 @@
 <link rel="stylesheet" href="assets/css/winterdienst.css">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Service", "serviceType": "Winterdienst, Räum- und Streudienst", "areaServed": {"@type": "City", "name": "Wiesbaden"}, "provider": {"@type": "LocalBusiness", "name": "LV Kommunal Winterdienst GmbH", "telephone": "+4961286059750", "email": "service@lvk-winterdienst.de", "address": {"@type": "PostalAddress", "streetAddress": "Kurt-Schumacher-Straße 36", "postalCode": "65232", "addressLocality": "Taunusstein", "addressCountry": "DE"}}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Betreuen Sie ganz Wiesbaden?", "acceptedAnswer": {"@type": "Answer", "text": "Wir sind im gesamten Stadtgebiet und in den Vororten unterwegs. Geben Sie Ihre Adresse im Objekt-Check ein, dann sehen Sie sofort, ob sie in unserem Kerngebiet liegt."}}, {"@type": "Question", "name": "Was ist mit Tiefgaragenrampen?", "acceptedAnswer": {"@type": "Answer", "text": "Rampen sind Standard bei uns. Sie kühlen schneller aus als die Fläche daneben und werden gesondert gestreut – oft mit Splitt, damit der Belag nicht leidet."}}, {"@type": "Question", "name": "Wie weisen Sie den Einsatz nach?", "acceptedAnswer": {"@type": "Answer", "text": "Jede Tour wird per GPS aufgezeichnet, die Streumenge kommt aus dem Bordcomputer. Sie bekommen ein Protokoll mit Zeit, Ort und Menge – das ist genau die Unterlage, nach der im Schadensfall gefragt wird."}}, {"@type": "Question", "name": "Übernehmen Sie auch die Haftung?", "acceptedAnswer": {"@type": "Answer", "text": "Die Verkehrssicherungspflicht können Sie vertraglich auf uns übertragen. Als Eigentümer bleiben Sie in der Auswahl- und Überwachungspflicht – dafür ist die Dokumentation da."}}]}</script>
+<link rel="stylesheet" href="assets/css/navi.css">
 <link rel="stylesheet" href="assets/css/demo-pille.css">
 </head>
 <body>
 <a class="skip" href="#inhalt">Zum Inhalt&nbsp;springen</a>
 
-<header class="kopf" id="kopf">
+<header class="kopf" id="kopf" data-bereich="winter">
   <div class="wrap kopf-innen">
     <a class="kopf-logo" href="./" aria-label="Zur Bereichsauswahl">
       <img class="logo-hell" src="assets/img/logo-hell.png" alt="LV Kommunal Winterdienst GmbH" width="335" height="85">
       <img class="logo-dunkel" src="assets/img/logo.png" alt="" aria-hidden="true" width="335" height="85">
     </a>
     <button class="nav-schalter" id="nav-schalter" aria-expanded="false" aria-controls="nav">Menü</button>
-    <nav class="nav" id="nav" aria-label="Hauptnavigation">
-      <a href="winterdienst#objekt-check">Objekt-Check</a>
-      <a href="#radar">Glätte-Radar</a>
-      <a href="winterdienst#fuhrpark">Fuhrpark</a>
-      <a href="winterdienst#nachweis">Nachweis</a>
-      <a href="winterdienst#kontakt">Angebot</a>
+    <nav class="nav navi" id="nav" aria-label="Hauptnavigation">
+      <div class="bereich" role="group" aria-label="Bereich wechseln">
+      <a class="bereich-link bereich-link--winter" href="winterdienst" aria-current="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M4.2 6.5l15.6 9M4.2 17.5l15.6-9"/></svg><span>Winterdienst</span></a>
+      <a class="bereich-link bereich-link--gruen" href="maeharbeiten"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21c0-9 6-15 15-16-1 9-7 15-15 16Z"/><path d="M5 21 13 13"/></svg><span>Mäharbeiten</span></a>
+      </div>
+      <details class="navi-gruppe"><summary>Leistungen</summary>
+      <div class="navi-panel navi-panel--breit"><div class="navi-spalten">
+      <div class="navi-spalte"><p class="navi-kopf">Für wen</p><ul>
+      <li><a href="winterdienst-gewerbe"><strong>Gewerbe und Industrie</strong><small>Höfe, Rampen, Werkstraßen</small></a></li>
+      <li><a href="winterdienst-hausverwaltung"><strong>Hausverwaltungen</strong><small>Gehwege und Zugänge</small></a></li>
+      <li><a href="winterdienst-parkplaetze"><strong>Parkplätze und Handel</strong><small>Frei vor Ladenöffnung</small></a></li>
+      <li><a href="winterdienst-kommunen"><strong>Kommunen</strong><small>Straßen und öffentliche Flächen</small></a></li>
+      </ul></div>
+      <div class="navi-spalte"><p class="navi-kopf">Wissen und Technik</p><ul>
+      <li><a href="winterdienst-raeumpflicht"><strong>Räum- und Streupflicht</strong><small>Wer wann räumen muss</small></a></li>
+      <li><a href="winterdienst-einsatznachweis"><strong>Einsatznachweis</strong><small>GPS-Protokoll zu jedem Einsatz</small></a></li>
+      <li><a href="winterdienst-technik"><strong>Technik und Fuhrpark</strong><small>Fahrzeuge und Streulager</small></a></li>
+      </ul></div>
+      </div>
+      <a class="navi-feature" href="winterdienst#objekt-check"><strong>Objekt-Check</strong><small>Fläche einzeichnen und in zwei Minuten einen Preisrahmen sehen.</small><span class="navi-feature-pfeil"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      </div></details>
+      <details class="navi-gruppe ist-aktiv"><summary>Regionen</summary>
+      <div class="navi-panel"><div class="navi-spalten">
+      <div class="navi-spalte"><p class="navi-kopf">Winterdienst vor Ort</p><ul>
+      <li><a href="winterdienst-taunusstein"><strong>Taunusstein</strong><small>Betriebsstätte</small></a></li>
+      <li><a href="winterdienst-idstein"><strong>Idstein</strong><small>Rheingau-Taunus</small></a></li>
+      <li><a href="winterdienst-wiesbaden" aria-current="page"><strong>Wiesbaden</strong><small>Landeshauptstadt</small></a></li>
+      <li><a href="winterdienst-limburg"><strong>Limburg</strong><small>Limburg-Weilburg</small></a></li>
+      <li><a href="winterdienst-mainz"><strong>Mainz</strong><small>Rheinland-Pfalz</small></a></li>
+      </ul></div>
+      </div>
+      <a class="navi-feature" href="winterdienst#gebiet"><strong>Einsatzgebiet</strong><small>Gehwege, Gewerbe und Straßen auf der Karte.</small><span class="navi-feature-pfeil"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      </div></details>
+      <details class="navi-gruppe"><summary>Werkzeuge</summary>
+      <div class="navi-panel"><div class="navi-spalten">
+      <div class="navi-spalte"><p class="navi-kopf">Selbst prüfen</p><ul>
+      <li><a href="winterdienst#objekt-check"><strong>Objekt-Check</strong><small>Fläche und Preisrahmen</small></a></li>
+      <li><a href="winterdienst#radar"><strong>Glätte-Radar</strong><small>Wie glatt wird es heute Nacht?</small></a></li>
+      <li><a href="winterdienst#raeumpflicht"><strong>Räumpflicht-Check</strong><small>Was die Satzung verlangt</small></a></li>
+      <li><a href="winterdienst#nacht"><strong>Eine Winternacht</strong><small>Ein Einsatz von 21 bis 7 Uhr</small></a></li>
+      </ul></div>
+      </div>
+      </div></details>
+      <a class="navi-link" href="winterdienst#fragen">Fragen</a>
       <a class="kopf-tel" href="tel:08008118800">0800 811 88&nbsp;00</a>
     </nav>
   </div>
@@ -243,6 +282,7 @@
 <script src="assets/js/daten.js"></script>
 <script src="assets/js/werkzeuge.js"></script>
 <script src="assets/js/main.js"></script>
+<script src="assets/js/navi.js"></script>
 <a class="nxm-demo" href="https://nexas-media.de" target="_blank" rel="noopener noreferrer">
   <span class="nxm-demo__text">Demo&nbsp;by</span>
   <img class="nxm-demo__logo" src="assets/img/nexas-media-logo-weiss.svg"

@@ -1,0 +1,120 @@
+/* =============================================================================
+   LV Kommunal – Kopfzeile mit Bereichswechsel und Ausklappmenüs
+   Gilt für Winterdienst-, Mäh- und Rechtsseiten. Wird nach seiten.css bzw.
+   winterdienst.css geladen und übersteuert deren einfache Navigation.
+   ============================================================================= */
+.kopf { --akzent: #0077A8; --akzent-hell: #5CC8F2; --akzent-flaeche: #E6F4FB; }
+.kopf[data-bereich="gruen"] { --akzent: #2F5A27; --akzent-hell: #9FCB92; --akzent-flaeche: #EEF5EA; }
+
+.kopf .navi { flex: 1; margin-left: 1.25rem; display: flex; align-items: center; gap: .15rem; }
+
+/* Bereichswechsel: beide Bereiche immer sichtbar, der eigene gefüllt */
+.bereich {
+  display: inline-flex; padding: 3px; border-radius: 100px; margin-right: auto;
+  background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .22);
+}
+.kopf .navi .bereich-link {
+  display: inline-flex; align-items: center; gap: .4rem; padding: .42rem .85rem; border-radius: 100px;
+  font-size: .86rem; font-weight: 600; color: rgba(255, 255, 255, .85); white-space: nowrap; border: 0;
+}
+.kopf .navi .bereich-link:hover { background: rgba(255, 255, 255, .14); color: #fff; }
+.kopf .navi .bereich-link[aria-current="true"] { background: #fff; color: var(--akzent); box-shadow: 0 2px 8px rgba(0, 0, 0, .12); }
+.kopf--fest .bereich { background: var(--raum); border-color: var(--raum-2); }
+.kopf--fest .navi .bereich-link { color: var(--stahl); }
+.kopf--fest .navi .bereich-link:hover { background: #fff; color: var(--nacht); }
+.kopf--fest .navi .bereich-link[aria-current="true"] { background: var(--akzent); color: #fff; }
+
+/* Menüpunkte */
+.navi-gruppe { position: relative; }
+.navi-gruppe > summary, .kopf .navi .navi-link {
+  list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: .35rem;
+  padding: .55rem .75rem; border-radius: var(--r); font-size: .93rem; font-weight: 500; color: #fff;
+  text-decoration: none; white-space: nowrap; transition: background .15s, color .15s;
+}
+.navi-gruppe > summary::-webkit-details-marker { display: none; }
+.navi-gruppe > summary::after {
+  content: ""; width: 7px; height: 7px; margin-left: .15rem; border-right: 1.6px solid currentColor; border-bottom: 1.6px solid currentColor;
+  transform: translateY(-2px) rotate(45deg); transition: transform .2s; opacity: .7;
+}
+.navi-gruppe[open] > summary::after { transform: translateY(2px) rotate(-135deg); }
+.navi-gruppe > summary:hover, .navi-gruppe[open] > summary, .kopf .navi .navi-link:hover { background: rgba(255, 255, 255, .12); }
+.kopf--fest .navi-gruppe > summary, .kopf--fest .navi .navi-link { color: var(--nacht); }
+.kopf--fest .navi-gruppe > summary:hover, .kopf--fest .navi-gruppe[open] > summary, .kopf--fest .navi .navi-link:hover { background: var(--raum); }
+.navi-gruppe.ist-aktiv > summary { box-shadow: inset 0 -2px 0 var(--akzent-hell); }
+.kopf--fest .navi-gruppe.ist-aktiv > summary { box-shadow: inset 0 -2px 0 var(--akzent); }
+.navi-gruppe > summary:focus-visible, .kopf .navi a:focus-visible { outline: 2px solid var(--akzent-hell); outline-offset: 2px; }
+.kopf .navi .kopf-tel { margin-left: .6rem; }
+
+/* Ausklappfeld */
+.navi-panel {
+  position: absolute; top: calc(100% + 14px); left: 50%; transform: translateX(-50%); z-index: 5;
+  width: max-content; max-width: min(92vw, 44rem);
+  display: grid; gap: 1rem; padding: 1.1rem; border-radius: 18px;
+  background: #fff; border: 1px solid var(--raum-2);
+  box-shadow: 0 1px 2px rgba(10, 24, 34, .06), 0 24px 60px rgba(10, 24, 34, .18);
+}
+.navi-panel::before { content: ""; position: absolute; left: 0; right: 0; top: -16px; height: 16px; } /* Brücke für die Maus */
+.navi-panel--breit { grid-template-columns: minmax(0, 1fr) 13rem; }
+.navi-spalten { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(13rem, 1fr); gap: .6rem; }
+.navi-kopf { margin: .2rem .7rem .4rem; font-family: var(--mono); font-size: .62rem; letter-spacing: .16em; text-transform: uppercase; color: var(--stahl-hell); }
+.navi-spalte ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .1rem; }
+.kopf .navi .navi-spalte a {
+  display: grid; gap: .05rem; padding: .55rem .7rem; border-radius: 10px; border: 0;
+  color: var(--nacht); text-decoration: none; white-space: normal;
+}
+.kopf .navi .navi-spalte a strong { font-size: .93rem; font-weight: 600; }
+.kopf .navi .navi-spalte a small { font-size: .78rem; color: var(--stahl-hell); font-weight: 400; }
+.kopf .navi .navi-spalte a:hover { background: var(--akzent-flaeche); }
+.kopf .navi .navi-spalte a:hover strong { color: var(--akzent); }
+.kopf .navi .navi-spalte a[aria-current="page"] { background: var(--akzent-flaeche); box-shadow: inset 3px 0 0 var(--akzent); }
+.kopf .navi .navi-feature {
+  position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: .3rem; min-height: 9rem;
+  padding: 1rem 1.1rem; border-radius: 14px; border: 0; color: #fff; text-decoration: none; white-space: normal;
+  background: radial-gradient(120% 100% at 100% 0%, rgba(255, 255, 255, .18), transparent 60%), var(--akzent);
+}
+.kopf .navi .navi-feature strong { font-family: var(--display); font-size: 1.05rem; font-weight: 700; }
+.kopf .navi .navi-feature small { font-size: .82rem; line-height: 1.45; color: rgba(255, 255, 255, .85); }
+.navi-feature-pfeil { position: absolute; top: 1rem; right: 1rem; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, .18); transition: transform .2s; }
+.kopf .navi .navi-feature:hover .navi-feature-pfeil { transform: translateX(3px); }
+.kopf .navi .navi-feature:focus-visible { outline: 2px solid var(--akzent); outline-offset: 3px; }
+/* Schmale Felder (eine Spalte): Feature unter die Liste */
+.navi-panel:not(.navi-panel--breit) .navi-feature { min-height: 0; }
+@media (min-width: 1181px) and (prefers-reduced-motion: no-preference) {
+  .navi-gruppe[open] .navi-panel { animation: navi-auf .18s ease-out; }
+}
+@keyframes navi-auf { from { opacity: 0; transform: translate(-50%, -6px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+/* ----------------------------------------------- Schublade unter 1180 px */
+@media (max-width: 1180px) {
+  .kopf .nav-schalter { display: block; }
+  .kopf .navi {
+    position: absolute; top: 100%; left: 0; right: 0; margin: 0; flex: none;
+    max-height: calc(100dvh - 64px); overflow-y: auto; overscroll-behavior: contain;
+    flex-direction: column; align-items: stretch; gap: 0;
+    background: var(--nacht); padding: 1rem 1.25rem 1.5rem; box-shadow: var(--schatten-tief);
+    transform: translateY(-6px); opacity: 0; visibility: hidden; transition: opacity .2s, transform .2s, visibility 0s .2s;
+  }
+  .kopf .navi[data-offen="true"] { transform: none; opacity: 1; visibility: visible; transition: opacity .2s, transform .2s; }
+  .bereich, .kopf--fest .bereich { display: grid; grid-template-columns: 1fr 1fr; margin: 0 0 .8rem; background: rgba(255, 255, 255, .06); border-color: rgba(255, 255, 255, .14); }
+  .kopf .navi .bereich-link, .kopf--fest .navi .bereich-link { justify-content: center; color: rgba(255, 255, 255, .8); padding: .6rem .5rem; }
+  .kopf .navi .bereich-link[aria-current="true"], .kopf--fest .navi .bereich-link[aria-current="true"] { background: #fff; color: var(--akzent); }
+  .navi-gruppe > summary, .kopf--fest .navi-gruppe > summary, .kopf .navi .navi-link, .kopf--fest .navi .navi-link {
+    display: flex; justify-content: space-between; width: 100%; color: #fff; padding: .9rem .4rem; border-radius: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, .08); font-size: 1rem;
+  }
+  .navi-gruppe > summary:hover, .navi-gruppe[open] > summary, .kopf .navi .navi-link:hover,
+  .kopf--fest .navi-gruppe > summary:hover, .kopf--fest .navi-gruppe[open] > summary, .kopf--fest .navi .navi-link:hover { background: none; }
+  .navi-gruppe.ist-aktiv > summary, .kopf--fest .navi-gruppe.ist-aktiv > summary { box-shadow: none; color: var(--akzent-hell); }
+  .navi-panel { position: static; transform: none; width: auto; max-width: none; padding: .4rem 0 .8rem; background: none; border: 0; box-shadow: none; border-radius: 0; }
+  .navi-panel::before { content: none; }
+  .navi-panel--breit { grid-template-columns: minmax(0, 1fr); }
+  .navi-spalten { grid-auto-flow: row; grid-auto-columns: auto; gap: .4rem; }
+  .navi-kopf { color: #7E9BAD; margin-left: .4rem; }
+  .kopf .navi .navi-spalte a, .kopf--fest .navi .navi-spalte a { color: #fff; padding: .5rem .4rem; }
+  .kopf .navi .navi-spalte a small { color: #8FA9BC; }
+  .kopf .navi .navi-spalte a:hover, .kopf .navi .navi-spalte a[aria-current="page"] { background: rgba(255, 255, 255, .06); }
+  .kopf .navi .navi-spalte a:hover strong { color: #fff; }
+  .kopf .navi .navi-feature { min-height: 0; }
+  .kopf .navi .kopf-tel, .kopf--fest .navi .kopf-tel { margin: 1rem 0 0; color: #fff; border-color: rgba(255, 255, 255, .28); text-align: center; justify-content: center; }
+}
+@media (max-width: 1180px) and (prefers-reduced-motion: reduce) { .kopf .navi { transition: none; } }

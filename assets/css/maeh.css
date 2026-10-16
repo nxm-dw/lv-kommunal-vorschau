@@ -384,3 +384,126 @@
   .maeh-fakten-innen > div:nth-child(n+2) { border-top: 1px solid rgba(159, 203, 146, .16); }
   .region strong { font-size: 1.12rem; }
 }
+
+/* Grünjahr: Status nicht mehr am Titel (brach bei langen Titeln um), sondern
+   als erste Angabe in der Unterzeile. */
+.jahr-zeile--jetzt .jahr-name strong::after { content: none; display: none; }
+.jahr-zeile--jetzt .jahr-name small::before {
+  content: "Läuft gerade"; display: inline-flex; align-items: center; margin-right: .5rem;
+  font-weight: 700; color: var(--gras-tief);
+}
+.jahr-zeile--jetzt .jahr-name small::after { content: none; }
+.jahr-zeile--jetzt .jahr-name strong::before {
+  content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: .5rem; vertical-align: .15em;
+  background: var(--gras); box-shadow: 0 0 0 4px rgba(76, 140, 63, .18);
+}
+
+/* ----------------------------------------------- Baukasten als Funnel (16.10.)
+   Greift nur mit Skript (.bk-funnel). Ohne Skript stehen alle Fragen untereinander. */
+.bk-fortschritt, .bk-steuer, .bk-abschluss { display: none; }
+.bk-funnel { gap: 0; align-content: start; }
+.bk-funnel .bk-fortschritt { display: grid; gap: .9rem; margin-bottom: 1.6rem; }
+.bk-funnel .bk-steuer { display: flex; align-items: center; gap: 1rem; margin-top: 1.8rem; padding-top: 1.3rem; border-top: 1px solid rgba(196, 224, 184, .14); }
+.bk-funnel .bk-gruppe { display: none; }
+.bk-funnel .bk-gruppe.bk-aktiv { display: grid; align-content: start; }
+.bk-funnel fieldset.bk-gruppe.bk-aktiv { display: block; }
+.bk-funnel .bk-gruppe legend, .bk-funnel .bk-legende { font-size: clamp(1.25rem, 2vw, 1.55rem); margin-bottom: 1.1rem; }
+.bk-funnel .bk-gruppe legend:focus, .bk-funnel .bk-legende:focus { outline: none; }
+.bk-funnel .bk-gruppe legend:focus-visible, .bk-funnel .bk-legende:focus-visible { outline: 2px solid var(--gras-hell); outline-offset: 4px; border-radius: 4px; }
+.bk-funnel .bk-schritt { width: 32px; height: 32px; font-size: .85rem; }
+
+/* Fortschritt: Statuszeile, Linie und fünf Stationen */
+.bk-status { margin: 0; font-family: var(--mono); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--gras-hell); }
+.bk-punkte {
+  --fortschritt: 0;
+  position: relative; list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.bk-punkte::before, .bk-punkte::after {
+  content: ""; position: absolute; top: 15px; left: 10%; right: 10%; height: 2px; border-radius: 2px;
+  background: rgba(196, 224, 184, .16);
+}
+.bk-punkte::after {
+  right: auto; width: calc(80% * var(--fortschritt)); background: var(--gras-hell);
+  transition: width .45s cubic-bezier(.22, .8, .28, 1);
+}
+.bk-punkte li { position: relative; z-index: 1; display: flex; justify-content: center; min-width: 0; }
+.bk-punkt {
+  display: grid; justify-items: center; gap: .4rem; min-width: 0; max-width: 100%;
+  background: none; border: 0; padding: 0; font: inherit; color: #A9C4A0; cursor: pointer;
+}
+.bk-punkt:disabled { cursor: default; }
+.bk-punkt-nr {
+  width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
+  font-family: var(--mono); font-size: .78rem; background: var(--wald); color: #A9C4A0;
+  border: 2px solid rgba(196, 224, 184, .28); transition: background .25s, border-color .25s, color .25s, box-shadow .25s;
+}
+.bk-punkt-name { font-size: .78rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.bk-punkt.ist-fertig .bk-punkt-nr { background: var(--gras-tief); border-color: var(--gras-hell); color: var(--weiss); }
+.bk-punkt.ist-fertig .bk-punkt-name { color: #DCEBD2; }
+.bk-punkt.ist-aktiv .bk-punkt-nr { background: var(--gras-hell); border-color: var(--gras-hell); color: var(--wald); box-shadow: 0 0 0 5px rgba(159, 203, 146, .2); }
+.bk-punkt.ist-aktiv .bk-punkt-name { color: var(--weiss); }
+.bk-punkt:not(:disabled):hover .bk-punkt-nr { border-color: var(--gras-hell); }
+.bk-punkt:focus-visible { outline: none; }
+.bk-punkt:focus-visible .bk-punkt-nr { outline: 3px solid var(--weiss); outline-offset: 2px; }
+
+/* Zurück, Hinweis, Weiter */
+.bk-zurueck {
+  background: none; border: 1px solid rgba(196, 224, 184, .3); color: #DCEBD2; font: inherit; font-weight: 600; font-size: .95rem;
+  padding: .8rem 1.2rem; border-radius: 10px; cursor: pointer; transition: border-color .2s, color .2s;
+}
+.bk-zurueck:hover { border-color: var(--gras-hell); color: var(--weiss); }
+.bk-weiter {
+  margin-left: auto; display: inline-flex; align-items: center; gap: .6rem;
+  background: var(--gras-hell); color: var(--wald); border: 0; font: inherit; font-weight: 700; font-size: 1rem;
+  padding: .85rem 1.5rem; border-radius: 10px; cursor: pointer; transition: background .2s, transform .2s, opacity .2s;
+}
+.bk-weiter:hover { background: #B6DCAA; }
+.bk-weiter svg { transition: transform .2s; }
+.bk-weiter:hover svg { transform: translateX(3px); }
+.bk-weiter[aria-disabled="true"] { opacity: .55; }
+.bk-weiter[aria-disabled="true"]:hover { transform: none; background: var(--gras-hell); }
+.bk-zurueck:focus-visible, .bk-weiter:focus-visible { outline: 3px solid var(--weiss); outline-offset: 2px; }
+.bk-zurueck[hidden], .bk-weiter[hidden], .bk-pflicht[hidden] { display: none; }
+.bk-pflicht { margin: 0; font-size: .88rem; color: #FFD59A; flex: 1; text-align: right; }
+
+/* Schrittwechsel: kurzes Einblenden in Laufrichtung */
+@media (prefers-reduced-motion: no-preference) {
+  .bk-funnel .bk-gruppe.bk-vor { animation: bk-von-rechts .38s cubic-bezier(.22, .8, .28, 1) both; }
+  .bk-funnel .bk-gruppe.bk-zurueck { animation: bk-von-links .38s cubic-bezier(.22, .8, .28, 1) both; }
+}
+@keyframes bk-von-rechts { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
+@keyframes bk-von-links { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: none; } }
+
+/* Abschluss */
+.bk-funnel .bk-abschluss.bk-aktiv { display: grid; gap: 1.1rem; }
+.bk-abschluss .bk-legende { margin-bottom: 0; }
+.bk-abschluss-text { margin: 0; color: #C9DDBF; max-width: 34rem; }
+.bk-abschluss-liste { margin: 0; display: none; border: 1px solid rgba(196, 224, 184, .18); border-radius: 14px; overflow: hidden; }
+.bk-abschluss-liste > div { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: .8rem; padding: .7rem .9rem; border-top: 1px solid rgba(196, 224, 184, .12); }
+.bk-abschluss-liste > div:first-child { border-top: 0; }
+.bk-abschluss-liste dt { font-family: var(--mono); font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--gras-hell); padding-top: .2rem; }
+.bk-abschluss-liste dd { margin: 0; font-weight: 600; color: var(--weiss); overflow-wrap: anywhere; }
+.bk-abschluss-liste dd.leer { font-weight: 400; color: #A9C4A0; }
+.bk-funnel .bk-abschluss-senden { justify-self: start; }
+.bereich-maeh .sek-nacht .bk-funnel .bk-abschluss-senden { background: var(--gras-hell); border-color: var(--gras-hell); color: var(--wald); }
+.bereich-maeh .sek-nacht .bk-funnel .bk-abschluss-senden:hover { background: #B6DCAA; border-color: #B6DCAA; color: var(--wald); }
+
+/* Desktop: Zettel bleibt rechts stehen. Mobil: Zettel weg, Zusammenfassung im letzten Schritt */
+@media (max-width: 900px) {
+  .bk--funnel .bk-zettel { display: none; }
+  .bk-funnel .bk-abschluss-liste { display: grid; }
+  .bk-funnel .bk-abschluss-senden { justify-self: stretch; justify-content: center; }
+}
+@media (max-width: 560px) {
+  .bk-punkt-name { display: none; }
+  .bk-punkte::before, .bk-punkte::after { top: 15px; }
+  .bk-funnel .bk-steuer { gap: .6rem; flex-wrap: wrap; }
+  .bk-pflicht { order: 3; flex-basis: 100%; text-align: left; }
+  .bk-abschluss-liste > div { grid-template-columns: minmax(0, 1fr); gap: .15rem; }
+}
+/* Leistungsfinder sehr schmal: lange Komposita wie „Straßenbegleitgrün" trennen statt überlaufen */
+@media (max-width: 420px) {
+  .finder-tab { padding: .75rem .65rem; }
+  .finder-tab-text strong { font-size: .86rem; hyphens: auto; -webkit-hyphens: auto; }
+}
