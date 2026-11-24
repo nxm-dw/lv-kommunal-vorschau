@@ -25,5 +25,5 @@ Die Auslieferungsfassung liegt unverändert im Kundenordner.
 
 ## Bildmaterial
 
-Die Motive sind erzeugt, nicht fotografiert, und zeigen keine echten Fahrzeuge
-des Betriebs.
+Seit 24.11.2026 echte Fotos von LV Kommunal (Winterdienst, Mähen, Verkehrssicherung).
+Nur das Regenrückhaltebecken-Motiv ist noch erzeugt.
