@@ -1,0 +1,19 @@
+{
+  "stand": "2026-11-24T05:40:00+01:00",
+  "demo": true,
+  "einsatz": "laeuft",
+  "seit": "02:40",
+  "fahrzeuge": { "unterwegs": 17, "gesamt": 29 },
+  "gebiete": [
+    { "name": "Taunusstein", "unterwegs": 6 },
+    { "name": "Idstein", "unterwegs": 3 },
+    { "name": "Wiesbaden", "unterwegs": 5 },
+    { "name": "Limburg", "unterwegs": 1 },
+    { "name": "Mainz", "unterwegs": 2 }
+  ],
+  "prognose": [
+    { "tag": "Heute Nacht", "prozent": 85, "text": "Reifglätte ab etwa 3\u00a0Uhr" },
+    { "tag": "Morgen Nacht", "prozent": 55, "text": "Überfrierende Nässe\u00a0möglich" },
+    { "tag": "Übermorgen", "prozent": 15, "text": "Plusgrade, eher\u00a0trocken" }
+  ]
+}

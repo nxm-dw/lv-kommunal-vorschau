@@ -4,7 +4,7 @@
    winterdienst.css geladen und übersteuert deren einfache Navigation.
    ============================================================================= */
 .kopf { --akzent: #0077A8; --akzent-hell: #5CC8F2; --akzent-flaeche: #E6F4FB; }
-.kopf[data-bereich="gruen"] { --akzent: #2F5A27; --akzent-hell: #9FCB92; --akzent-flaeche: #EEF5EA; }
+.kopf[data-bereich="gruen"] { --akzent: #0077A8; --akzent-hell: #5CC8F2; --akzent-flaeche: #E6F3FA; }
 
 .kopf .navi { flex: 1; margin-left: 1.25rem; display: flex; align-items: center; gap: .15rem; }
 

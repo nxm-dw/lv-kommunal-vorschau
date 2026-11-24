@@ -2344,3 +2344,28 @@ html:not(.js) .achse { display: none; }
 @media (max-width: 420px) { .fuss-gitter:has(> .fuss-leistungen) { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 420px) { .brotkrumen { letter-spacing: .06em; } .brotkrumen span { margin: 0 .3rem; } }
 #objekt-karte { height: clamp(380px, 64vh, 680px); }
+
+/* ------------------------------------------- Einsatzlage (24.11.2026)
+   Ersetzt das Glätte-Radar. Daten aus der GPS-App, siehe assets/js/lage.js. */
+.radar-wert dd small { font-size: .8rem; color: #7E9BAD; }
+.lage-gebiete { list-style: none; margin: 0 0 1.6rem; padding: 0; display: grid; gap: .55rem; }
+.lage-gebiete li { display: grid; grid-template-columns: minmax(7rem, 9rem) minmax(0, 1fr) 2rem; align-items: center; gap: .8rem; font-size: .92rem; }
+.lage-gebiete li.ist-hier .lage-name { color: var(--eis-hell); font-weight: 600; }
+.lage-name small { font-family: var(--mono); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: #7E9BAD; margin-left: .3rem; }
+.lage-zahl { font-family: var(--mono); text-align: right; }
+.lage-balken { display: block; height: 8px; border-radius: 100px; background: rgba(255,255,255,.08); overflow: hidden; }
+.lage-balken > span { display: block; height: 100%; border-radius: inherit; background: var(--eis); }
+.lage-kopf { font-family: var(--mono); font-size: .68rem; letter-spacing: .15em; text-transform: uppercase; color: #7E9BAD; margin: 0 0 .7rem; }
+.lage-prognose { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; }
+.lage-prognose li { display: grid; gap: .35rem; align-content: start; padding: .9rem 1rem; border-radius: 12px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); min-width: 0; }
+.lage-tag { font-size: .82rem; color: #C6D8E3; }
+.lage-prozent { font-family: var(--mono); font-size: 1.5rem; font-weight: 500; }
+.lage-text { font-size: .82rem; color: #A9C3D4; line-height: 1.4; }
+.lage-prognose li[data-stufe="hoch"] .lage-balken > span { background: var(--alarm); }
+.lage-prognose li[data-stufe="mittel"] .lage-balken > span { background: var(--salz); }
+.lage-prognose li[data-stufe="niedrig"] .lage-balken > span { background: var(--eis-hell); }
+.lage-demo { margin: 1.2rem 0 0; font-size: .82rem; color: #7E9BAD; }
+@media (max-width: 560px) {
+  .lage-prognose { grid-template-columns: minmax(0, 1fr); }
+  .lage-gebiete li { grid-template-columns: minmax(6rem, 7.5rem) minmax(0, 1fr) 1.6rem; }
+}

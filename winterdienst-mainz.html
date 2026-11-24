@@ -83,7 +83,7 @@
       <div class="navi-panel"><div class="navi-spalten">
       <div class="navi-spalte"><p class="navi-kopf">Selbst prüfen</p><ul>
       <li><a href="winterdienst#objekt-check"><strong>Objekt-Check</strong><small>Fläche und Preisrahmen</small></a></li>
-      <li><a href="winterdienst#radar"><strong>Glätte-Radar</strong><small>Wie glatt wird es heute Nacht?</small></a></li>
+      <li><a href="winterdienst#radar"><strong>Einsatzlage live</strong><small>Fahrzeuge und Einsatzprognose</small></a></li>
       <li><a href="winterdienst#raeumpflicht"><strong>Räumpflicht-Check</strong><small>Was die Satzung verlangt</small></a></li>
       <li><a href="winterdienst#nacht"><strong>Eine Winternacht</strong><small>Ein Einsatz von 21 bis 7 Uhr</small></a></li>
       </ul></div>
@@ -138,35 +138,26 @@
   <div class="wrap">
     <div class="zwei-spalten">
       <div class="auf">
-        <p class="eyebrow">Glätte-Radar</p>
-        <h2 class="d-l">Wird es in Mainz&nbsp;glatt?</h2>
+        <p class="eyebrow">Einsatzlage live</p>
+        <h2 class="d-l">Sind wir in Mainz gerade&nbsp;unterwegs?</h2>
         <p class="lead abstand-o">
-          Prognose für die nächsten 18 Stunden aus Lufttemperatur, Taupunkt, Bodentemperatur
-          und Niederschlag. Voreingestellt auf 55116 Mainz – Sie können jede andere
-          Postleitzahl&nbsp;eingeben.
+          Hier sehen Sie, ob gerade ein Winterdienst-Einsatz läuft, wie viele unserer Fahrzeuge
+          draußen sind und wie wahrscheinlich ein Einsatz in den nächsten Nächten ist. Die Daten
+          kommen aus unserer GPS-Ortung und aus dem Winterdienst-Wetterdienst, mit dem auch unsere
+          Disposition&nbsp;plant.
         </p>
         <p class="hinweis-klein">
-          Öffentliche Wetterauskunft, keine Einsatzentscheidung. Wann unsere Fahrzeuge fahren,
-          entscheidet die Disposition anhand einer kostenpflichtigen Winterdienst-Prognose.
-          Wetterdaten: Open-Meteo auf Basis des&nbsp;DWD-ICON-Modells.
+          Aus Datenschutzgründen zeigen wir keine genauen Positionen, nur die Zahl der Fahrzeuge
+          je&nbsp;Gebiet.
         </p>
       </div>
-      <div class="werkzeug auf v2">
+      <div class="werkzeug auf v2" id="lage" data-gebiet="Mainz">
         <div class="werkzeug-kopf">
-          <span>Prognose für&nbsp;Mainz</span>
-          <span class="zahl" id="radar-stand">–</span>
+          <span>Stand aus der&nbsp;Disposition</span>
+          <span class="zahl" id="lage-stand">–</span>
         </div>
-        <div class="werkzeug-koerper">
-          <form class="feldzeile" id="radar-form" data-plz="55116" autocomplete="off">
-            <div class="dehnt-1">
-              <label class="etikett" for="radar-plz">Postleitzahl oder&nbsp;Ort</label>
-              <input type="text" id="radar-plz" name="plz" value="55116" required>
-            </div>
-            <button class="btn btn-primaer unten-buendig" type="submit">Prüfen</button>
-          </form>
-          <div class="radar-ergebnis" id="radar-ergebnis" aria-live="polite">
-            <p class="lade">Prognose wird&nbsp;geladen</p>
-          </div>
+        <div class="werkzeug-koerper" id="lage-inhalt" aria-live="polite">
+          <p class="lade">Einsatzlage wird&nbsp;geladen</p>
         </div>
       </div>
     </div>
@@ -256,7 +247,7 @@
         <h3>Werkzeuge</h3>
         <ul>
           <li><a href="winterdienst#objekt-check">Objekt-Check</a></li>
-          <li><a href="winterdienst#radar">Glätte-Radar</a></li>
+          <li><a href="winterdienst#radar">Einsatzlage live</a></li>
           <li><a href="winterdienst#raeumpflicht">Räumpflicht-Check</a></li>
           <li><a href="winterdienst#nachweis">Einsatznachweis</a></li>
         </ul>
@@ -274,13 +265,14 @@
       <span>© <span id="jahr">2026</span> LV Kommunal Winterdienst&nbsp;GmbH</span>
       <a href="impressum">Impressum</a>
       <a href="datenschutz">Datenschutz</a>
-      <span>Kartendaten © OpenStreetMap-Mitwirkende · Wetterdaten Open-Meteo /&nbsp;DWD</span>
+      <span>Kartendaten © OpenStreetMap-Mitwirkende</span>
     </div>
   </div>
 </footer>
 
 <script src="assets/js/daten.js"></script>
 <script src="assets/js/werkzeuge.js"></script>
+<script src="assets/js/lage.js"></script>
 <script src="assets/js/main.js"></script>
 <script src="assets/js/navi.js"></script>
 <a class="nxm-demo" href="https://nexas-media.de" target="_blank" rel="noopener noreferrer">

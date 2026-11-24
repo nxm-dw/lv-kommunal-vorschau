@@ -172,11 +172,11 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 .feld--maeh .feld-schleier {
   background:
-    radial-gradient(112% 78% at 50% 50%, rgba(6,18,9,.68) 0%, rgba(6,18,9,.12) 76%),
+    radial-gradient(112% 78% at 50% 50%, rgba(6,16,23,.68) 0%, rgba(6,16,23,.12) 76%),
     linear-gradient(to bottom,
-      rgba(9,24,12,.46) 0%, rgba(9,24,12,.38) 36%,
-      rgba(9,24,12,.54) 76%, rgba(9,24,12,.86) 100%),
-    linear-gradient(168deg, rgba(46,104,32,.22) 0%, rgba(9,24,12,0) 62%);
+      rgba(8,20,30,.46) 0%, rgba(8,20,30,.38) 36%,
+      rgba(8,20,30,.54) 76%, rgba(8,20,30,.86) 100%),
+    linear-gradient(168deg, rgba(0,119,168,.22) 0%, rgba(8,20,30,0) 62%);
 }
 .feld--maeh .feld-bild { filter: saturate(.9) brightness(.9); }
 
@@ -185,7 +185,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px;
   background: linear-gradient(to bottom,
     transparent 0%, rgba(255,255,255,.3) 18%,
-    rgba(92,200,242,.85) 48%, rgba(169,207,151,.85) 52%,
+    rgba(92,200,242,.85) 48%, rgba(169,216,238,.85) 52%,
     rgba(255,255,255,.3) 82%, transparent 100%);
   z-index: 4; pointer-events: none; transform: translateX(-.5px);
 }
@@ -203,7 +203,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   outline-offset: -10px;
   border-radius: 2px;
 }
-.feld--maeh:focus-visible { outline-color: #C4E0B8; }
+.feld--maeh:focus-visible { outline-color: #BFDDEF; }
 .feld:focus-visible .feld-cta { background: var(--eis-tief); }
 
 .feld-innen {
@@ -222,7 +222,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .feld-wortmarke em {
   display: block; margin-top: .45rem; font-style: normal;
   font-family: var(--mono); font-weight: 400; font-size: .62rem;
-  letter-spacing: .28em; text-transform: uppercase; color: #A9CF97;
+  letter-spacing: .28em; text-transform: uppercase; color: #A9D8EE;
 }
 
 .feld-saison {
@@ -236,9 +236,9 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   border: 1px solid rgba(92,200,242,.45); background: rgba(4,12,18,.7);
 }
 .feld-saison::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-.feld--maeh .feld-saison { color: #A9CF97; border-color: rgba(169,207,151,.45); background: rgba(6,18,9,.7); }
+.feld--maeh .feld-saison { color: #A9D8EE; border-color: rgba(169,216,238,.45); background: rgba(6,16,23,.7); }
 .feld-saison[data-ruhe="true"] { color: #C6D8E3; border-color: rgba(255,255,255,.3); background: rgba(4,12,18,.72); }
-.feld--maeh .feld-saison[data-ruhe="true"] { background: rgba(6,18,9,.72); }
+.feld--maeh .feld-saison[data-ruhe="true"] { background: rgba(6,16,23,.72); }
 
 .feld-titel {
   display: block; white-space: nowrap; text-wrap: nowrap;
@@ -252,7 +252,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   color: #D8E6EF; margin: 0 0 clamp(1.5rem, 3.5vh, 2.2rem);
   text-shadow: 0 1px 14px rgba(4,12,18,.95), 0 1px 36px rgba(4,12,18,.85);
 }
-.feld--maeh .feld-text { color: #DEECD5; }
+.feld--maeh .feld-text { color: #D6E6F0; }
 
 .feld-cta {
   display: inline-flex; align-items: center; gap: .6rem;
@@ -458,8 +458,8 @@ html:not(.js) .streu-schiene, html:not(.js) .breite-schiene { display: none; }
   background: rgba(0,158,224,.2); border: 1px solid rgba(92,200,242,.5); color: var(--eis-hell);
 }
 .saison-marke::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--eis-hell); }
-.feld--maeh .saison-marke { background: rgba(159,203,146,.16); border-color: rgba(159,203,146,.45); color: #C4E0B8; }
-.feld--maeh .saison-marke::before { background: #9FCB92; }
+.feld--maeh .saison-marke { background: rgba(92,200,242,.16); border-color: rgba(92,200,242,.45); color: #BFDDEF; }
+.feld--maeh .saison-marke::before { background: #5CC8F2; }
 .saison-marke[data-ruhe="true"] { background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.2); color: #A9C3D4; }
 .saison-marke[data-ruhe="true"]::before { background: #7E9BAD; }
 @media (min-width: 860px) {
@@ -499,8 +499,8 @@ html:not(.js) .achse { display: none; }
 @media (max-width: 420px) { h1, h2 { hyphens: auto; -webkit-hyphens: auto; } }
 
 /* Mäharbeiten: echter Einstieg statt „In Entwicklung", in Grün */
-.feld-cta--gruen { background: #2F5A27; box-shadow: none; }
-.feld--maeh:hover .feld-cta--gruen, .feld--maeh:focus-visible .feld-cta--gruen { background: #3C7032; box-shadow: 0 10px 32px rgba(76, 140, 63, .45); }
+.feld-cta--gruen { background: #0077A8; box-shadow: none; }
+.feld--maeh:hover .feld-cta--gruen, .feld--maeh:focus-visible .feld-cta--gruen { background: #00668F; box-shadow: 0 10px 32px rgba(0, 158, 224, .45); }
 
 /* ----------------------------------------------------------------------------
    Ein Logo für beide Bereiche: mittig auf der Trennkante, als Glaskarte.
@@ -513,7 +513,7 @@ html:not(.js) .achse { display: none; }
   border: 1px solid transparent;
   background:
     linear-gradient(rgba(6, 15, 20, .62), rgba(6, 15, 20, .62)) padding-box,
-    linear-gradient(90deg, rgba(92, 200, 242, .85), rgba(255, 255, 255, .35) 50%, rgba(169, 207, 151, .85)) border-box;
+    linear-gradient(90deg, rgba(92, 200, 242, .85), rgba(255, 255, 255, .35) 50%, rgba(169, 216, 238, .85)) border-box;
   -webkit-backdrop-filter: blur(16px) saturate(1.2); backdrop-filter: blur(16px) saturate(1.2);
   box-shadow: 0 18px 50px rgba(0, 0, 0, .38), 0 0 0 6px rgba(255, 255, 255, .03);
   pointer-events: none;
@@ -523,7 +523,7 @@ html:not(.js) .achse { display: none; }
 .tor-felder::after {
   background: linear-gradient(to bottom,
     transparent 0%, transparent 9%, rgba(255,255,255,.35) 14%,
-    rgba(92,200,242,.85) 48%, rgba(169,207,151,.85) 52%,
+    rgba(92,200,242,.85) 48%, rgba(169,216,238,.85) 52%,
     rgba(255,255,255,.3) 82%, transparent 100%);
 }
 .tor:not(.tor--sparsam) .tor-marke { animation: marke-auf 1s cubic-bezier(.2,.8,.25,1) .15s backwards; }

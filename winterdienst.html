@@ -172,7 +172,7 @@
           "name": "Was ist Reifglätte – und warum ist sie gefährlich?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Reifglätte entsteht ohne einen Tropfen Niederschlag. Sobald der Taupunkt über die Bodentemperatur steigt, schlägt sich die Luftfeuchte als Reif auf der Fläche nieder und gefriert. Deshalb sagt die Lufttemperatur wenig aus: Entscheidend sind Bodentemperatur und Taupunkt. Unser Glätte-Radar zeigt beide Werte für Ihre Adresse."
+            "text": "Reifglätte entsteht ohne einen Tropfen Niederschlag. Sobald der Taupunkt über die Bodentemperatur steigt, schlägt sich die Luftfeuchte als Reif auf der Fläche nieder und gefriert. Deshalb sagt die Lufttemperatur wenig aus: Entscheidend sind Bodentemperatur und Taupunkt. Unsere Disposition plant deshalb mit einem Winterdienst-Wetterdienst, der genau diese Werte für unsere Strecken vorhersagt."
           }
         },
         {
@@ -298,7 +298,7 @@
       <div class="navi-panel"><div class="navi-spalten">
       <div class="navi-spalte"><p class="navi-kopf">Selbst prüfen</p><ul>
       <li><a href="#objekt-check"><strong>Objekt-Check</strong><small>Fläche und Preisrahmen</small></a></li>
-      <li><a href="#radar"><strong>Glätte-Radar</strong><small>Wie glatt wird es heute Nacht?</small></a></li>
+      <li><a href="#radar"><strong>Einsatzlage live</strong><small>Fahrzeuge und Einsatzprognose</small></a></li>
       <li><a href="#raeumpflicht"><strong>Räumpflicht-Check</strong><small>Was die Satzung verlangt</small></a></li>
       <li><a href="#nacht"><strong>Eine Winternacht</strong><small>Ein Einsatz von 21 bis 7 Uhr</small></a></li>
       </ul></div>
@@ -371,48 +371,33 @@
   </a>
 </section>
 
-<!-- ========================================================= Glätte-Radar -->
+<!-- ========================================================= Einsatzlage -->
 <section class="sek sek-nacht" id="radar">
   <div class="wrap">
     <div class="zwei-spalten">
-
       <div class="auf">
-        <p class="eyebrow">Glätte-Radar</p>
-        <h2 class="d-l">Wird es bei Ihnen&nbsp;glatt?</h2>
+        <p class="eyebrow">Einsatzlage live</p>
+        <h2 class="d-l">Sind wir gerade&nbsp;unterwegs?</h2>
         <p class="lead abstand-o">
-          Postleitzahl eingeben. Wir lesen für die nächsten 18 Stunden Lufttemperatur,
-          Taupunkt, Bodentemperatur und Niederschlag aus und rechnen zusammen,
-          was das für Ihre Fläche&nbsp;bedeutet.
+          Hier sehen Sie, ob gerade ein Winterdienst-Einsatz läuft, wie viele unserer Fahrzeuge
+          draußen sind und wie wahrscheinlich ein Einsatz in den nächsten Nächten ist. Die Daten
+          kommen aus unserer GPS-Ortung und aus dem Winterdienst-Wetterdienst, mit dem auch unsere
+          Disposition&nbsp;plant.
         </p>
         <p class="hinweis-klein">
-          Das ist eine öffentliche Wetterauskunft, keine Einsatzentscheidung.
-          Ob unsere Fahrzeuge tatsächlich rausfahren, entscheidet die Disposition
-          anhand einer kostenpflichtigen Winterdienst-Prognose mit Glättewarnung,
-          eigener Streckenerfahrung und Rückmeldungen aus dem Gebiet.
-          Wetterdaten: Open-Meteo auf Basis des&nbsp;DWD-ICON-Modells.
+          Aus Datenschutzgründen zeigen wir keine genauen Positionen, nur die Zahl der Fahrzeuge
+          je&nbsp;Gebiet.
         </p>
       </div>
-
-      <div class="werkzeug auf v2">
+      <div class="werkzeug auf v2" id="lage" data-gebiet="">
         <div class="werkzeug-kopf">
-          <span>Prognose für Ihren&nbsp;Standort</span>
-          <span class="zahl" id="radar-stand">–</span>
+          <span>Stand aus der&nbsp;Disposition</span>
+          <span class="zahl" id="lage-stand">–</span>
         </div>
-        <div class="werkzeug-koerper">
-          <form class="feldzeile" id="radar-form" autocomplete="off">
-            <div class="dehnt-1">
-              <label class="etikett" for="radar-plz">Postleitzahl oder&nbsp;Ort</label>
-              <input type="text" id="radar-plz" name="plz" value="65232" placeholder="zum Beispiel 65232 oder Idstein" required>
-            </div>
-            <button class="btn btn-primaer unten-buendig" type="submit">Prüfen</button>
-          </form>
-
-          <div class="radar-ergebnis" id="radar-ergebnis" aria-live="polite">
-            <p class="lade">Prognose wird&nbsp;geladen</p>
-          </div>
+        <div class="werkzeug-koerper" id="lage-inhalt" aria-live="polite">
+          <p class="lade">Einsatzlage wird&nbsp;geladen</p>
         </div>
       </div>
-
     </div>
   </div>
 </section>
@@ -1421,8 +1406,7 @@
               Reifglätte entsteht ohne einen Tropfen Niederschlag. Sobald der Taupunkt über
               die Bodentemperatur steigt, schlägt sich die Luftfeuchte als Reif auf der
               Fläche nieder und gefriert. Deshalb sagt die Lufttemperatur wenig aus:
-              Entscheidend sind Bodentemperatur und Taupunkt. Unser Glätte-Radar zeigt
-              beide Werte für Ihre&nbsp;Adresse.
+              Entscheidend sind Bodentemperatur und Taupunkt. Unsere Disposition plant deshalb mit einem Winterdienst-Wetterdienst, der genau diese Werte für unsere Strecken&nbsp;vorhersagt.
             </p>
           </div>
         </details>
@@ -1654,7 +1638,7 @@
         <h3>Werkzeuge</h3>
         <ul>
           <li><a href="winterdienst#objekt-check">Objekt-Check</a></li>
-          <li><a href="winterdienst#radar">Glätte-Radar</a></li>
+          <li><a href="winterdienst#radar">Einsatzlage live</a></li>
           <li><a href="winterdienst#raeumpflicht">Räumpflicht-Check</a></li>
           <li><a href="winterdienst#nachweis">Einsatznachweis</a></li>
           <li><a href="winterdienst#fragen">Häufige&nbsp;Fragen</a></li>
@@ -1677,7 +1661,6 @@
       <p class="fuss-quellen">
         <span>Karten <span aria-hidden="true">·</span> OpenStreetMap-Mitwirkende</span>
         <span>Luftbilder <span aria-hidden="true">·</span> Esri</span>
-        <span>Wetter <span aria-hidden="true">·</span> Open-Meteo /&nbsp;DWD</span>
       </p>
     </div>
   </div>
@@ -1691,6 +1674,7 @@
 <script src="assets/js/anfrage.js"></script>
 <script src="assets/js/gebiet.js"></script>
 <!-- main.js zuletzt: die Einblendungen sollen den bereits gefüllten Inhalt sehen -->
+<script src="assets/js/lage.js"></script>
 <script src="assets/js/main.js"></script>
 <script src="assets/js/navi.js"></script>
 <a class="nxm-demo" href="https://nexas-media.de" target="_blank" rel="noopener noreferrer">
